@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:layout_margin="@dimen/dp_10"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="请选择推广金额"
+        android:textColor="@color/black" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_money1"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_text_stroke"
+            android:gravity="center"
+            android:text="50"
+            android:textColor="@color/red"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_money2"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_text_stroke"
+            android:gravity="center"
+            android:text="100"
+            android:textColor="@color/red"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_money3"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_text_stroke"
+            android:gravity="center"
+            android:text="150"
+            android:textColor="@color/red"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tv_money4"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_text_stroke"
+            android:gravity="center"
+            android:text="200"
+            android:textColor="@color/red"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_money5"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_text_stroke"
+            android:gravity="center"
+            android:text="250"
+            android:textColor="@color/red"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_money6"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_text_stroke"
+            android:gravity="center"
+            android:text="300"
+            android:textColor="@color/red"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="自定义金额"
+        android:textColor="@color/black"
+        android:textSize="16dp" />
+
+    <EditText
+        android:id="@+id/et_custom_amount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:background="@drawable/shape_text_stroke"
+        android:hint="请输入金额"
+        android:padding="10dp"
+        android:textSize="14dp" />
+
+    <RelativeLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_10">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:background="@drawable/shape_text_stroke"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:background="@color/red"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+    </RelativeLayout>
+</LinearLayout>

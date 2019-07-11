@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/white">
+
+    <include layout="@layout/item_red_title" />
+
+    <LinearLayout
+        android:id="@+id/ll_top"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="请上传本人肩部以上五官清晰头像照" />
+
+            <ImageView
+                android:id="@+id/img_identity"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@color/hui" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="请上传本人身份证正反面照" />
+
+            <ImageView
+                android:id="@+id/img_identity_card"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@color/hui" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="姓名"
+                    android:textColor="@color/black"
+                    android:textSize="14dp" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/null_drawable"
+                    android:hint="姓名必须与身份证上姓名相同"
+                    android:textSize="14dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="身份证"
+                    android:textColor="@color/black"
+                    android:textSize="14dp" />
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/null_drawable"
+                    android:hint="身份证号与身份证上号码相同"
+                    android:textSize="14dp" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ll_top"
+        android:gravity="center"
+        android:text="(本平台承诺，未经用户同意，不会透露个人信息)"
+        android:textColor="@color/red" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/red"
+        android:gravity="center"
+        android:text="提交审核"
+        android:textColor="@color/white"
+        android:textSize="16dp" />
+</RelativeLayout>

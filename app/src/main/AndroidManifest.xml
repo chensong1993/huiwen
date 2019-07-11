@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.shanghai.logistics">
+
+    <!-- //获取设备网络状态，禁用后无法获取网络状态 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- //网络权限，当禁用后，无法进行检索等相关业务 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- //读取设备硬件信息，统计数据 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- //读取系统信息，包含系统版本等信息，用作统计 -->
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <!-- //获取设备的网络状态，鉴权所需网络代理 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- //允许sd卡写权限，需写入地图数据，禁用后无法显示地图 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- //这个权限用于进行网络定位 -->
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <!-- //这个权限用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- //获取统计数据 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- //使用步行AR导航，配置Camera权限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- //程序在手机屏幕关闭后后台进程仍然运行 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!-- 用于申请调用A-GPS模块 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <!-- 用于申请获取蓝牙信息进行室内定位 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <application
+        android:name=".app.App"
+        android:allowBackup="true"
+        android:icon="@drawable/project_icon"
+        android:label="@string/app_name"
+        android:maxAspectRatio="2.4"
+        android:roundIcon="@drawable/project_icon"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".WelcomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppWelcomeTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|locale"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".DriverActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".UserActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LogisticsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.login.RegisterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.activity.login.ChangePasswordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.shanghai.logistics.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/rc_file_path" />
+        </provider>
+        <!-- 适配华为（huawei）刘海屏 -->
+        <meta-data
+            android:name="android.notch_support"
+            android:value="true" />
+        <!-- 适配小米（xiaomi）刘海屏 -->
+        <meta-data
+            android:name="notch.config"
+            android:value="portrait|landscape" />
+
+        <!-- 高德地图 -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="df3973ba3036ffaefbc2e977691d4dcb" />
+
+        <service android:name="com.amap.api.location.APSService" />
+
+        <!-- 会话界面 -->
+        <!-- 会话界面 -->
+
+        <activity
+            android:name=".ui.main_activity.address_list.NewFriendListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.main_activity.address_list.GroupingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.main_activity.address_list.PersonalInforActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.main_activity.main_me.DynamicActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.main_activity.main_me.WalletActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.main_activity.main_me.CollectActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.main_activity.main_me.SettingActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.main_activity.main_me.WithdrawActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.main_activity.main_me.PayActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.main_activity.dynamic.DynamicDActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.UserBackActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.ShopDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.SpecialLineActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.HomeDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.MoreCommentsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.home_detail.ContactActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.home_detail.ServiceActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.home_detail.PlaceAnOrderActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.home_detail.VehicleTypeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.home_detail.VehicleLengthActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.home_detail.AddressActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.me.ApproveActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.me.AddressListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.me.AddAddressActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.order.OrderDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.release.SendOrdersActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.release.ShipmentsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.release.ReleaseDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.linkman.LinkManDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".SwitchingIdentityActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.driver_activity.AddLineActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.driver_activity.ScheduleDetailActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.driver_activity.ScheduleReleaseActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.logistics_activity.BillingActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.logistics_activity.WayBillActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.logistics_activity.StartRecordingActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.logistics_activity.LogisticsDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.logistics_activity.AddOrderListActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.logistics_activity.AddDriverListActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.logistics_activity.AsternRecordActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.logistics_activity.AddShopActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.logistics_activity.CertificationActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.logistics_activity.TeamListActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.logistics_activity.OrderActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.logistics_activity.SelectContactsActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.logistics_activity.PhoneListActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.logistics_activity.AddPhoneActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.logistics_activity.AddStoresActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.logistics_activity.PromoteActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".QRCodesActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.activity.GaodeActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.user_activity.release.UserReleaseActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.driver_activity.DriverReleaseActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+    </application>
+
+</manifest>
