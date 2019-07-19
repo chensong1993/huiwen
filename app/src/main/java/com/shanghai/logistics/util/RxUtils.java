@@ -16,9 +16,11 @@ import io.reactivex.ObservableTransformer;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
+import io.reactivex.SingleSource;
 import io.reactivex.SingleTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
+import io.reactivex.internal.operators.single.SingleToFlowable;
 import io.reactivex.schedulers.Schedulers;
 
 public class RxUtils {
@@ -76,7 +78,7 @@ public class RxUtils {
                             Log.i("apply", "apply: ");
                             return createData(tHttpResponse.getData());
                         } else {
-                            return Flowable.error(new Exception(tHttpResponse.getMsg()+""));
+                            return Flowable.error(new Exception(tHttpResponse.getMsg() + ""));
                         }
                     }
                 });
@@ -84,6 +86,64 @@ public class RxUtils {
         };
     }
 
+    /**
+     * 统一返回结果处理
+     *
+     * @param <T>
+     * @return
+     */
+    public static <T> FlowableTransformer<T, T> handleNoResults() {   //compose判断结果
+        return new FlowableTransformer<T, T>() {
+            @Override
+            public Flowable<T> apply(Flowable<T> httpResponseFlowable) {
+                return httpResponseFlowable.flatMap(new Function<T, Flowable<T>>() {
+                    @Override
+                    public Flowable<T> apply(T tHttpResponse) {
+                        Log.i("apply", "apply: ");
+                        return createData(tHttpResponse);
+
+                    }
+                });
+            }
+        };
+    }
+
+    /**
+     * 统一返回结果处理
+     *
+     * @param <T>
+     * @return
+     */
+    public static <T> SingleTransformer<ApiResponse<T>, T> handleResultFile() {   //compose判断结果
+        return new SingleTransformer<ApiResponse<T>, T>() {
+            @Override
+            public SingleSource<T> apply(Single<ApiResponse<T>> upstream) {
+                if (upstream.blockingGet().getMsg() == 1) {
+                    Log.i("apply", "apply: ");
+                    return createSingle(upstream.blockingGet().getData());
+                } else {
+                    return Single.error(new Exception(upstream.blockingGet().getMsg() + ""));
+                }
+
+            }
+
+
+        };
+    }
+
+    public static <T> SingleTransformer<T, T> getList() {   //compose判断结果
+        return new SingleTransformer<T, T>() {
+            @Override
+            public Single<T> apply(Single<T> upstream) {
+                return upstream.flatMap(new Function<T, Single<T>>() {
+                    @Override
+                    public Single<T> apply(T tHttpResponse) {
+                        return createSingle(tHttpResponse);
+                    }
+                });
+            }
+        };
+    }
 
 //    public static <T> ObservableTransformer<ApiResponse<T>, T> handleResultsObserable() {   //compose判断结果
 //        return new ObservableTransformer<ApiResponse<T>, T>() {
@@ -122,20 +182,6 @@ public class RxUtils {
 //            }
 //        };
 //    }
-
-    public static <T> SingleTransformer<T, T> getList() {   //compose判断结果
-        return new SingleTransformer<T, T>() {
-            @Override
-            public Single<T> apply(Single<T> upstream) {
-                return upstream.flatMap(new Function<T, Single<T>>() {
-                    @Override
-                    public Single<T> apply(T tHttpResponse) {
-                        return createSingle(tHttpResponse);
-                    }
-                });
-            }
-        };
-    }
 
 
     public static <T> Flowable<T> createData(final T t) {

@@ -45,7 +45,7 @@ import butterknife.OnClick;
  * 物流端
  * */
 public class LogisticsActivity extends SimpleActivity {
-
+    public static final String TAG = "LogisticsActivity";
     private FragmentManager supportFragmentManager;
     @BindView(R.id.frameLayout_activity)
     FrameLayout frameLayoutUserActivity;
@@ -62,7 +62,7 @@ public class LogisticsActivity extends SimpleActivity {
     @BindView(R.id.ll_release)
     LinearLayout mLlRelease;
     Bundle bundle;
-    int fragmentType = 0;
+    int fragmentType;
     long mBackTime;
 
     //private LogisticsViewPagerAdapter adapter;
@@ -83,6 +83,7 @@ public class LogisticsActivity extends SimpleActivity {
         DestroyActivityUtil.addDestoryActivityToMap(this, "LogisticsActivity");
         //判断当前是否用户类型
         App.kv.encode(Constants.SELECTED_USER_TYPE, Constants.LOGISTICS_CLIENT);
+
         setSwipeBackEnable(false);
         ImmersionBar.with(this)
                 .fitsSystemWindows(true)
@@ -91,9 +92,15 @@ public class LogisticsActivity extends SimpleActivity {
 
         supportFragmentManager = getSupportFragmentManager();
         setShowFragment(fragmentType);
-
+        Log.i(TAG, "initEventAndData: " + fragmentType);
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: " + fragmentType);
+    }
 
     @OnClick({R.id.rb_home, R.id.rb_linkman, R.id.tv_release, R.id.rb_order, R.id.rb_mine})
     public void onViewClicked(View view) {
@@ -121,8 +128,8 @@ public class LogisticsActivity extends SimpleActivity {
 //                mRvHome.setChecked(false);
                 fragmentType = 2;
                 startActivity(new Intent(this, UserReleaseActivity.class));
-                overridePendingTransition(R.anim.bottom_in,R.anim.bottom_silent);
-              //  DriverReleaseFragment.startFragment(R.id.frameLayout_activity, DriverReleaseFragment.class, bundle, supportFragmentManager, 1);
+                overridePendingTransition(R.anim.bottom_in, R.anim.bottom_silent);
+                //  DriverReleaseFragment.startFragment(R.id.frameLayout_activity, DriverReleaseFragment.class, bundle, supportFragmentManager, 1);
                 break;
             case R.id.rb_linkman://联系人
                 mRbLinkman.setChecked(true);
@@ -157,39 +164,40 @@ public class LogisticsActivity extends SimpleActivity {
                 mRbOrder.setChecked(false);
                 mRbMine.setChecked(false);
                 mRvHome.setChecked(true);
-                LogisticsHomeFragment.startFragment(R.id.frameLayout_activity, LogisticsHomeFragment.class, bundle, supportFragmentManager, 1);
+                LogisticsHomeFragment.startFragment(R.id.frameLayout_activity, LogisticsHomeFragment.class, bundle, supportFragmentManager, 0);
                 break;
             case 1:
                 mRbLinkman.setChecked(false);
                 mRbOrder.setChecked(true);
                 mRbMine.setChecked(false);
                 mRvHome.setChecked(false);
-                DriverOrderFragment.startFragment(R.id.frameLayout_activity, DriverOrderFragment.class, bundle, supportFragmentManager, 1);
+                DriverOrderFragment.startFragment(R.id.frameLayout_activity, DriverOrderFragment.class, bundle, supportFragmentManager, 0);
                 break;
             case 2://快速发布订单
 //                mRbLinkman.setChecked(false);
 //                mRbOrder.setChecked(false);
 //                mRbMine.setChecked(false);
 //                mRvHome.setChecked(false);
-                DriverReleaseFragment.startFragment(R.id.frameLayout_activity, DriverReleaseFragment.class, bundle, supportFragmentManager, 1);
+                DriverReleaseFragment.startFragment(R.id.frameLayout_activity, DriverReleaseFragment.class, bundle, supportFragmentManager, 0);
                 break;
             case 3://联系人
                 mRbLinkman.setChecked(true);
                 mRbOrder.setChecked(false);
                 mRbMine.setChecked(false);
                 mRvHome.setChecked(false);
-                UserLinkmanFragment.startFragment(R.id.frameLayout_activity, UserLinkmanFragment.class, bundle, supportFragmentManager, 1);
+                UserLinkmanFragment.startFragment(R.id.frameLayout_activity, UserLinkmanFragment.class, bundle, supportFragmentManager, 0);
                 break;
             case 4://我的
                 mRbLinkman.setChecked(false);
                 mRbOrder.setChecked(false);
                 mRbMine.setChecked(true);
                 mRvHome.setChecked(false);
-                LogisticsMeFragment.startFragment(R.id.frameLayout_activity, LogisticsMeFragment.class, bundle, supportFragmentManager, 1);
+                LogisticsMeFragment.startFragment(R.id.frameLayout_activity, LogisticsMeFragment.class, bundle, supportFragmentManager, 0);
                 break;
 
         }
     }
+
     /**
      * 申请指定的权限.
      */

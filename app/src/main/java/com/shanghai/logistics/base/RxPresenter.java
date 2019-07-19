@@ -24,6 +24,8 @@ public class RxPresenter<T extends BaseView> implements BasePresenter<T> {
         mCompositeDisposable.add(subscription);
     }
 
+
+
     protected <U> void addRxBusSubscribe(Class<U> eventType, Consumer<U> act) {
         if (mCompositeDisposable == null) {
             mCompositeDisposable = new CompositeDisposable();

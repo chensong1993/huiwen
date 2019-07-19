@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="50dp"
         android:orientation="vertical">
 
@@ -109,13 +109,15 @@
                         android:layout_marginRight="10dp"
                         android:background="@color/hui" />
 
-                    <TextView
+                    <EditText
+                        android:id="@+id/et_end_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="@drawable/null_drawable"
-                        android:text="上海市浦东区"
-                        android:textColor="@color/black" />
+                        android:text="上海浦东新区"
+                        android:textColor="@color/black"
+                        android:textSize="14dp" />
 
                 </LinearLayout>
 
@@ -133,6 +135,7 @@
                         android:textColor="@color/black" />
 
                     <EditText
+                        android:id="@+id/et_goods"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
@@ -143,10 +146,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
-                        android:text="装货:"
+                        android:text="体积:"
                         android:textColor="@color/black" />
 
                     <EditText
+                        android:id="@+id/et_volume"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -167,6 +171,7 @@
                         android:textColor="@color/black" />
 
                     <EditText
+                        android:id="@+id/et_weight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
@@ -181,6 +186,7 @@
                         android:textColor="@color/black" />
 
                     <EditText
+                        android:id="@+id/et_pieces"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -260,10 +266,32 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:text="装卸方式"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tv_loadMethod"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="选择装卸方式＞"
+                        android:textColor="@color/red" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="回单"
                         android:textColor="@color/black" />
 
                     <EditText
+                        android:id="@+id/et_receipt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/item_stroke_black"
@@ -287,6 +315,7 @@
                         android:textColor="@color/black" />
 
                     <EditText
+                        android:id="@+id/et_remark"
                         android:layout_width="match_parent"
                         android:layout_height="120dp"
                         android:layout_weight="1"
@@ -301,32 +330,18 @@
         </android.support.v4.widget.NestedScrollView>
     </LinearLayout>
 
-    <LinearLayout
+
+    <TextView
+        android:id="@+id/tv_confirm"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@color/red"
-            android:gravity="center"
-            android:text="发给联系人"
-            android:textColor="@color/white"
-            android:textSize="16dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@color/blue"
-            android:gravity="center"
-            android:text="发给所有人"
-            android:textColor="@color/white"
-            android:textSize="16dp" />
-    </LinearLayout>
+        android:layout_weight="1"
+        android:background="@color/red"
+        android:gravity="center"
+        android:text="确认叫车"
+        android:textColor="@color/white"
+        android:textSize="16dp" />
 
 
 </RelativeLayout>

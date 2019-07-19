@@ -58,10 +58,14 @@
                         android:text="公司名称"
                         android:textColor="@color/black" />
 
-                    <TextView
+                    <EditText
+                        android:id="@+id/et_companyName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="qwer"
+                        android:text=""
+                        android:hint="请输入公司名称"
+                        android:background="@drawable/null_drawable"
+                        android:textSize="14dp"
                         android:textColor="@color/black" />
                 </LinearLayout>
 
@@ -77,10 +81,14 @@
                         android:text="注册地址"
                         android:textColor="@color/black" />
 
-                    <TextView
+                    <EditText
+                        android:id="@+id/et_addressDetail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="qwer"
+                        android:text=""
+                        android:hint="请输入注册地址"
+                        android:background="@drawable/null_drawable"
+                        android:textSize="14dp"
                         android:textColor="@color/black" />
                 </LinearLayout>
 
@@ -96,10 +104,14 @@
                         android:text="公司地址"
                         android:textColor="@color/black" />
 
-                    <TextView
+                    <EditText
+                        android:id="@+id/et_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="qwer"
+                        android:text=""
+                        android:hint="请输入公司地址"
+                        android:background="@drawable/null_drawable"
+                        android:textSize="14dp"
                         android:textColor="@color/black" />
                 </LinearLayout>
 
@@ -117,6 +129,7 @@
 
 
     <TextView
+        android:id="@+id/tv_confirm"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"

@@ -29,7 +29,7 @@ public abstract class SimpleActivity extends SwipeBackActivity   {
     public static final int PRC_PHOTO_PICKER = 1;
     public static final int RC_CHOOSE_PHOTO = 1;
     public static final int RC_PHOTO_PREVIEW = 2;
-    public static final String TAG="SimpleActivity";
+  //  public static final String TAG="SimpleActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

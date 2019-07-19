@@ -206,7 +206,10 @@ public abstract class SimpleFragment extends SupportFragment  implements Immersi
                 Log.e(TAG, "startFragment: IllegalStateException");
             }
             //移除已经常创建的 重新生成
-           // fragmentTransaction.detach(fragmentByTag).attach(fragmentByTag).show(fragmentByTag);
+            if(saveType==0){
+                fragmentTransaction.detach(fragmentByTag).attach(fragmentByTag).show(fragmentByTag);
+            }
+           //
             //直接显示已经存在的
             fragmentTransaction.show(fragmentByTag);
         }

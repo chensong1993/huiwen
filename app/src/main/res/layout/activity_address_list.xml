@@ -9,66 +9,9 @@
 
     <include layout="@layout/item_red_title" />
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_address_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="略略略"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="15945458454"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:layout_width="40dp"
-                android:layout_height="20dp"
-                android:background="@color/red"
-                android:gravity="center"
-                android:text="编辑"
-                android:textColor="@color/white" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="10dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="上海市浦东新区"
-                android:textColor="@color/black" />
-
-            <TextView
-                android:layout_width="40dp"
-                android:layout_height="20dp"
-                android:background="@color/red"
-                android:gravity="center"
-                android:text="删除"
-                android:textColor="@color/white" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/hui" />
 </LinearLayout>

@@ -1,6 +1,7 @@
 package com.shanghai.logistics.ui.user_activity.release;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -43,27 +44,46 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.flyco.tablayout.SlidingTabLayout;
+import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.hjq.toast.ToastUtils;
 import com.shanghai.logistics.R;
 import com.shanghai.logistics.app.App;
 import com.shanghai.logistics.app.Constants;
+import com.shanghai.logistics.base.BaseActivity;
 import com.shanghai.logistics.base.SimpleActivity;
+import com.shanghai.logistics.base.connectors.user.UserCarModelConnector;
+import com.shanghai.logistics.models.entity.ApiResponse;
+import com.shanghai.logistics.models.entity.user.CarModelEntity;
+import com.shanghai.logistics.models.services.ApiService;
+import com.shanghai.logistics.models.services.UserService;
+import com.shanghai.logistics.presenters.user.UserCarModelPresenter;
 import com.shanghai.logistics.ui.adapter.dynamic.ViewPagerAdapter;
+import com.shanghai.logistics.ui.adapter.dynamic.ViewPagerListAdapter;
 import com.shanghai.logistics.ui.user_activity.home_detail.AddressActivity;
 import com.shanghai.logistics.ui.user_activity.home_detail.VehicleLengthActivity;
 import com.shanghai.logistics.ui.user_fragment.order.TakeOrdersFragment;
 import com.shanghai.logistics.ui.user_fragment.release.CarTypeFragment;
 import com.shanghai.logistics.util.DataUtil;
+import com.shanghai.logistics.util.FileUploadUtil;
+import com.yzq.zxinglibrary.common.Constant;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import okhttp3.RequestBody;
 
-public class ShipmentsActivity extends SimpleActivity implements AMapLocationListener, GeocodeSearch.OnGeocodeSearchListener {
+public class ShipmentsActivity extends BaseActivity<UserCarModelPresenter> implements UserCarModelConnector.View, AMapLocationListener, GeocodeSearch.OnGeocodeSearchListener {
     @BindView(R.id.img_back)
     ImageView mImgBack;
     @BindView(R.id.tv_title)
@@ -100,6 +120,8 @@ public class ShipmentsActivity extends SimpleActivity implements AMapLocationLis
     ViewPagerAdapter mViewPagerAdapter;
     List<Fragment> fragmentList;
     String[] TITLE = {"小面包", "依维柯", "小型平板", "中货车", "6米8", "7米6"};
+    List<String> TITLe;
+    List<String> CarImgList;
     String AddressName;
     OptionsPickerView pvOptions;
     List<String> mOptionsItems;
@@ -146,12 +168,37 @@ public class ShipmentsActivity extends SimpleActivity implements AMapLocationLis
     }
 
     @Override
+    public void UserCarModel(List<CarModelEntity> e) {
+        for (int i = 0; i < e.size(); i++) {
+            TITLe.add(e.get(i).getCarModel());
+            CarImgList.add(Constants.MAIN_URL + e.get(i).getCarImg());
+            Log.i(TAG, "UserCarModel: "+e.get(i).getCarModel());
+        }
+
+        //   TITLE=e.get(i).getCarModel();
+    }
+
+    @Override
+    public void UserCarModelErr(String s) {
+        Log.i(TAG, "UserCarModelErr: "+s);
+    }
+
+    @Override
     protected void initEventAndData() {
+       // TITLe = new ArrayList<>();
+      //  CarImgList = new ArrayList<>();
+      //  mPresenter.getUserCarModel();
         onLocationClientOption();
         mTvTitle.setText("发货");
         fragmentList = new ArrayList<>();
         fragmentList.clear();
+
         for (int i = 0; i < TITLE.length; i++) {
+//            Bundle bundle = new Bundle();
+//            bundle.putString("carModel", TITLE.get(i));
+//            bundle.putString("carImg", CarImgList.get(i));
+//            CarTypeFragment carTypeFragment = new CarTypeFragment();
+//            carTypeFragment.setArguments(bundle);
             fragmentList.add(new CarTypeFragment());
         }
 
@@ -159,6 +206,7 @@ public class ShipmentsActivity extends SimpleActivity implements AMapLocationLis
         mVp.setOffscreenPageLimit(3);
         mVp.setAdapter(mViewPagerAdapter);
         mStTab.setViewPager(mVp);
+
 
         pvTime = new TimePickerBuilder(this, new OnTimeSelectListener() {
             @Override
@@ -348,6 +396,11 @@ public class ShipmentsActivity extends SimpleActivity implements AMapLocationLis
     }
 
     @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
@@ -414,5 +467,67 @@ public class ShipmentsActivity extends SimpleActivity implements AMapLocationLis
 
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    //提交发货单
+    @SuppressLint("CheckResult")
+    private void orderInfo() {
+        Map<String, RequestBody> map = new HashMap<>();
+//        map.put("userAccount", FileUploadUtil.requestBody("15169169195"));
+//        map.put("startUserName", FileUploadUtil.requestBody());
+//        map.put("startPhone", FileUploadUtil.requestBody());
+//        map.put("startAddress", FileUploadUtil.requestBody());
+//        map.put("endUserName", FileUploadUtil.requestBody());
+//        map.put("endPhone", FileUploadUtil.requestBody());
+//        map.put("endAddress", FileUploadUtil.requestBody());
+//        map.put("freight", FileUploadUtil.requestBody());
+//        map.put("loadingTime", FileUploadUtil.requestBody());
+//        map.put("loadMethod", FileUploadUtil.requestBody());
+//        map.put("agentFee", FileUploadUtil.requestBody());
+//        map.put("carModel", FileUploadUtil.requestBody());
+//        map.put("payType", FileUploadUtil.requestBody());
+//        map.put("totalFee", FileUploadUtil.requestBody());
+//        map.put("driverDeposit", FileUploadUtil.requestBody());
+//        map.put("receipt", FileUploadUtil.requestBody());
+//        map.put("driverName", FileUploadUtil.requestBody());
+//        map.put("driverPhone", FileUploadUtil.requestBody());
+//
+//        map.put("orderNo", FileUploadUtil.requestBody());
+        ApiService.getInstance()
+                .create(UserService.class, Constants.MAIN_URL)
+                .orderInfo(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new SingleObserver<ApiResponse<Integer>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        //  Log.i(TAG, "onSubscribe: ");
+                    }
+
+                    @Override
+                    public void onSuccess(ApiResponse<Integer> integer) {
+                        switch (integer.getMsg()) {
+                            case 0:
+                                ToastUtils.show("上传失败");
+                                break;
+                            case 1:
+                                ToastUtils.show("上传成功");
+                                break;
+                            case -1:
+                                ToastUtils.show("参数不能为空");
+                                break;
+                            case -2:
+                                ToastUtils.show("账号已经注册过");
+                                break;
+                        }
+                        Log.i(TAG, "onSuccess: " + integer.getMsg());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.i(TAG, "onError: ");
+                    }
+
+                });
     }
 }

@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shanghai.logistics.R;
+import com.shanghai.logistics.app.Constants;
 import com.shanghai.logistics.base.SimpleActivity;
 
 import butterknife.BindView;
@@ -32,6 +33,7 @@ public class AddressActivity extends SimpleActivity {
     ImageView mImgBack;
     Bundle bundle;
     static final String TAG = "AddressActivity";
+    int type;
 
     @Override
     protected int getLayout() {
@@ -53,8 +55,16 @@ public class AddressActivity extends SimpleActivity {
                     bundle.putString("address_phone", mTvPhone.getText().toString());
                     bundle.putString("address_address", mTvAddress.getText().toString());
                     intent.putExtra("addressActivity", bundle);
-                    setResult(PlaceAnOrderActivity.ADDRESS, intent);
-                    finish();
+                    switch (type) {
+                        case PlaceAnOrderActivity.ADDRESS:
+                            setResult(PlaceAnOrderActivity.ADDRESS, intent);
+                            finish();
+                            break;
+                        case PlaceAnOrderActivity.END_ADDRESS:
+                            setResult(PlaceAnOrderActivity.END_ADDRESS, intent);
+                            finish();
+                            break;
+                    }
 
                 }
                 break;
@@ -63,6 +73,10 @@ public class AddressActivity extends SimpleActivity {
 
     @Override
     protected void initEventAndData() {
+        Bundle bundle = getIntent().getBundleExtra(Constants.All_VALUE);
+        if (bundle != null) {
+            type = bundle.getInt(Constants.START_TYPE);
 
+        }
     }
 }

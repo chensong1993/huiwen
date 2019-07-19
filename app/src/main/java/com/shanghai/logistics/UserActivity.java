@@ -1,7 +1,11 @@
 package com.shanghai.logistics;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -13,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gyf.immersionbar.ImmersionBar;
+import com.hjq.toast.ToastUtils;
 import com.shanghai.logistics.app.App;
 import com.shanghai.logistics.app.Constants;
 import com.shanghai.logistics.base.SimpleActivity;
@@ -38,6 +43,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class UserActivity extends SimpleActivity {
+    public static final String TAG = "UserActivity";
     private FragmentManager supportFragmentManager;
     @BindView(R.id.frameLayout_activity)
     FrameLayout frameLayoutUserActivity;
@@ -67,6 +73,10 @@ public class UserActivity extends SimpleActivity {
 
     @Override
     protected void initEventAndData() {
+        boolean b = hasPermission(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (!b) {
+            requestPermission(Constants.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
+        }
         //将activity 添加 以便在特定节点关闭
         DestroyActivityUtil.addDestoryActivityToMap(this, "UserActivity");
         //判断当前是否用户类型
@@ -196,5 +206,39 @@ public class UserActivity extends SimpleActivity {
     protected void onDestroy() {
         super.onDestroy();
         //   App.refWatcher.watch(this);
+    }
+
+    /**
+     * 申请指定的权限.
+     */
+    public void requestPermission(int requestCode, String... permissions) {
+
+        ActivityCompat.requestPermissions(this, permissions, requestCode);
+    }
+
+
+    /**
+     * 判断是否有指定的权限
+     */
+    public boolean hasPermission(String... permissions) {
+
+        for (String permisson : permissions) {
+            if (ActivityCompat.checkSelfPermission(App.getInstance(), permisson)
+                    != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        } else {
+            ToastUtils.show("您已拒绝使用定位功能");
+        }
+
+
     }
 }

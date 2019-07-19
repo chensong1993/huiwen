@@ -7,9 +7,10 @@
     android:background="@color/white">
 
     <ImageView
+        android:id="@+id/img_store"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="@color/black" />
+        android:scaleType="fitXY"/>
 
     <ImageView
         android:id="@+id/img_back"
@@ -44,18 +45,20 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/tv_storeName"
                         android:layout_width="0dp"
                         android:layout_height="50dp"
                         android:layout_weight="1"
                         android:gravity="left"
-                        android:text="KKK"
+                        android:text=""
                         android:textColor="@color/black" />
 
                     <TextView
+                        android:id="@+id/tv_storeService_point"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:gravity="center"
-                        android:text="综合服务分 80" />
+                        android:text="" />
                 </LinearLayout>
 
                 <TextView
@@ -64,10 +67,11 @@
                     android:background="@color/hui" />
 
                 <TextView
+                    android:id="@+id/tv_store_address"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:gravity="center_vertical"
-                    android:text="上海" />
+                    android:text="" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -75,10 +79,11 @@
                     android:background="@color/hui" />
 
                 <TextView
+                    android:id="@+id/tv_introduction"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:gravity="center_vertical"
-                    android:text="Shanghai" />
+                    android:text="" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -96,19 +101,20 @@
                         android:background="@color/hui" />
 
                     <TextView
+                        android:id="@+id/tv_map_address"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginLeft="30dp"
                         android:gravity="center_vertical"
-                        android:text="上海" />
+                        android:text="" />
 
-                    <ImageView
+                    <TextView
                         android:id="@+id/img_call"
-                        android:layout_width="20dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="20dp"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:background="@color/black" />
+                        android:text="电话" />
                 </RelativeLayout>
 
 
@@ -185,4 +191,7 @@
             android:textColor="@color/white"
             android:textSize="16dp" />
     </LinearLayout>
+
+
+
 </RelativeLayout>

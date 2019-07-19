@@ -73,4 +73,6 @@ public class AddAddressActivity extends SimpleActivity {
         cityPicker = new JDCityPicker();
         cityPicker.init(this);
     }
+
+
 }

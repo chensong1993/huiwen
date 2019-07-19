@@ -6,8 +6,12 @@ import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersisto
 import com.shanghai.logistics.BuildConfig;
 import com.shanghai.logistics.app.App;
 import com.shanghai.logistics.app.Constants;
+import com.shanghai.logistics.injections.qualifier.LogisticsURL;
 import com.shanghai.logistics.injections.qualifier.NewsURL;
+import com.shanghai.logistics.injections.qualifier.UserURL;
+import com.shanghai.logistics.models.services.LogisticsService;
 import com.shanghai.logistics.models.services.NewsService;
+import com.shanghai.logistics.models.services.UserService;
 import com.shanghai.logistics.util.SystemUtil;
 
 import java.io.File;
@@ -52,17 +56,29 @@ public class HttpModule {
         return createRetrofit(builder, client, Constants.MAIN_URL);
     }
 
+    @Singleton
+    @Provides
+    @UserURL
+    Retrofit provideUserRetrofit(Retrofit.Builder builder, OkHttpClient client) {
+        return createRetrofit(builder, client, Constants.MAIN_URL);
+    }
 
+    @Singleton
+    @Provides
+    @LogisticsURL
+    Retrofit provideLogisticsRetrofit(Retrofit.Builder builder, OkHttpClient client) {
+        return createRetrofit(builder, client, Constants.MAIN_URL);
+    }
 
     @Singleton
     @Provides
     OkHttpClient provideClient(OkHttpClient.Builder builder) {
-        if (BuildConfig.LOG_DEBUG) {
+      //  if (BuildConfig.LOG_DEBUG) {
             HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
             //NONE不打印log  BODY 请求+相应行+Http头+Http请求体
             loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
             builder.addInterceptor(loggingInterceptor);
-        }
+      //  }
         File cacheFile = new File(Constants.PATH_CACHE);
         Cache cache = new Cache(cacheFile, 1024 * 1024 * 50);
         Interceptor cacheInterceptor = new Interceptor() {
@@ -126,6 +142,18 @@ public class HttpModule {
         return retrofit.create(NewsService.class);
     }
 
+
+    @Singleton
+    @Provides
+    UserService provideUserService(@UserURL Retrofit retrofit) {
+        return retrofit.create(UserService.class);
+    }
+
+    @Singleton
+    @Provides
+    LogisticsService provideLogisticsService(@LogisticsURL Retrofit retrofit) {
+        return retrofit.create(LogisticsService.class);
+    }
 
     private Retrofit createRetrofit(Retrofit.Builder builder, OkHttpClient client, String url) {
         return builder

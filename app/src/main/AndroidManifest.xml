@@ -77,11 +77,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.login.RegisterActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.activity.login.ChangePasswordActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
 
         <provider
@@ -114,135 +112,102 @@
 
         <activity
             android:name=".ui.main_activity.address_list.NewFriendListActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.main_activity.address_list.GroupingActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.main_activity.address_list.PersonalInforActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.main_activity.main_me.DynamicActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.main_activity.main_me.WalletActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.main_activity.main_me.CollectActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.main_activity.main_me.SettingActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.main_activity.main_me.WithdrawActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.main_activity.main_me.PayActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.main_activity.dynamic.DynamicDActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.UserBackActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.ShopDetailActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.SpecialLineActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.HomeDetailActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.MoreCommentsActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.home_detail.ContactActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.home_detail.ServiceActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.home_detail.PlaceAnOrderActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.home_detail.VehicleTypeActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.home_detail.VehicleLengthActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.home_detail.AddressActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
-            android:name=".ui.user_activity.me.ApproveActivity"
-            android:screenOrientation="portrait"
+            android:name=".ui.user_activity.me.CertificationActivity"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.me.AddressListActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.me.AddAddressActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.order.OrderDetailActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.release.SendOrdersActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.release.ShipmentsActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.release.ReleaseDetailActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.user_activity.linkman.LinkManDetailActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".SwitchingIdentityActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.driver_activity.AddLineActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.driver_activity.ScheduleDetailActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.driver_activity.ScheduleReleaseActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.logistics_activity.BillingActivity"
@@ -303,6 +268,9 @@
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
         <activity
             android:name=".ui.driver_activity.DriverReleaseActivity"
+            android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
+        <activity
+            android:name=".ui.logistics_activity.NewOrderDetailActivity"
             android:theme="@style/AppTheme.NoActionBar.SwipeBack" />
     </application>
 

@@ -49,24 +49,9 @@
             android:text="分组" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/rl_friend"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_friend"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center_vertical">
+        android:layout_height="wrap_content"/>
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/ic_img" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginLeft="50dp"
-            android:gravity="center_vertical"
-            android:text="大壮" />
-    </RelativeLayout>
 </LinearLayout>
