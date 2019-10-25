@@ -17,6 +17,7 @@ import com.shanghai.logistics.ui.user_activity.SpecialLineActivity;
 import com.shanghai.logistics.ui.user_activity.UserBackActivity;
 import com.shanghai.logistics.ui.user_activity.home_detail.ContactActivity;
 import com.shanghai.logistics.ui.user_activity.home_detail.PlaceAnOrderActivity;
+import com.shanghai.logistics.ui.user_activity.home_detail.VehicleLengthActivity;
 import com.shanghai.logistics.ui.user_activity.me.AddressListActivity;
 import com.shanghai.logistics.ui.user_activity.me.CertificationActivity;
 import com.shanghai.logistics.ui.user_activity.release.ShipmentsActivity;
@@ -29,19 +30,40 @@ import dagger.Component;
 public interface ActivityComponent {
 
     Activity getActivity();
+
     void inject(LoginActivity loginActivity);
+
     void inject(RegisterActivity registerActivity);
+
     void inject(ChangePasswordActivity changePasswordActivity);
+
     void inject(HomeDetailActivity homeDetailActivity);
+
     void inject(MoreCommentsActivity moreCommentsActivity);
+
     void inject(ContactActivity contactActivity);
+
     void inject(UserBackActivity userBackActivity);
+
     void inject(SpecialLineActivity specialLineActivity);
+
     void inject(ShopDetailActivity shopDetailActivity);
+
     void inject(AddressListActivity addressListActivity);
+
     void inject(ShipmentsActivity shipmentsActivity);
+
     void inject(NewFriendListActivity newFriendListActivity);
+
     void inject(BillingActivity billingActivity);
+
     void inject(PlaceAnOrderActivity placeAnOrderActivity);
+
     void inject(NewOrderDetailActivity newOrderDetailActivity);
+
+    void inject(VehicleLengthActivity vehicleLengthActivity);
+
+    void inject(CertificationActivity certificationActivity);
+
+    void inject(com.shanghai.logistics.ui.logistics_activity.CertificationActivity certificationActivity);
 }

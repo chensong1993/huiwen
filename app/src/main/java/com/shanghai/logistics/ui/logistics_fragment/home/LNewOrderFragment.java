@@ -62,15 +62,12 @@ public class LNewOrderFragment extends BaseFragment<LogisticsOrderInfoPresenter>
 
     @Override
     public void LogisticsOrderInfoErr(String s) {
-        int type=Integer.parseInt(s);
-        switch (type) {
-            case 0:
-                ToastUtils.show("暂无数据");
+
+        switch (s) {
+            case "0":
+             //   sToastUtils.show("暂无数据");
                 break;
-            case 1:
-             //   ToastUtils.show("");
-                break;
-            case -1:
+            case "-1":
 
                 break;
         }
@@ -91,7 +88,7 @@ public class LNewOrderFragment extends BaseFragment<LogisticsOrderInfoPresenter>
 
     @Override
     protected void initEventAndData() {
-        mPresenter.getLogisticsOrderInfo("15169169195", 1, 1);
+        mPresenter.getLogisticsOrderInfo(mLoginPhone, 1, 1);
         mOrderEntityList = new ArrayList<>();
         mLOrderListAdapter = new LOrderListAdapter(mOrderEntityList);
         mRvNewOrder.setAdapter(mLOrderListAdapter);
@@ -107,6 +104,28 @@ public class LNewOrderFragment extends BaseFragment<LogisticsOrderInfoPresenter>
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.getLogisticsOrderInfo(mLoginPhone, 1, 1);
+        mOrderEntityList = new ArrayList<>();
+        mLOrderListAdapter = new LOrderListAdapter(mOrderEntityList);
+        mRvNewOrder.setAdapter(mLOrderListAdapter);
+        mRvNewOrder.setLayoutManager(new LinearLayoutManager(getActivity()));
+        RvLineUtil.Line(mRvNewOrder, getActivity(), 1);
+        mLOrderListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent(getActivity(), NewOrderDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.All_VALUE,mLOrderListAdapter.getData().get(position).getOrderNo());
+                intent.putExtra(Constants.All_VALUE, bundle);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override

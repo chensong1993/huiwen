@@ -2,6 +2,7 @@ package com.shanghai.logistics.base.connectors.user;
 
 import com.shanghai.logistics.base.BasePresenter;
 import com.shanghai.logistics.base.BaseView;
+import com.shanghai.logistics.models.entity.user.CarLengthEntity;
 import com.shanghai.logistics.models.entity.user.CarModelEntity;
 import com.shanghai.logistics.models.entity.user.SpecialEntity;
 
@@ -16,9 +17,13 @@ public interface UserCarModelConnector {
     interface View extends BaseView {
         void UserCarModel(List<CarModelEntity> e);
         void UserCarModelErr(String s);
+
+        void UserCarLength(List<CarLengthEntity> e);
+        void UserCarLengthErr(String err);
     }
 
     interface Presenter extends BasePresenter<View> {
         void getUserCarModel();
+        void getUserCarLength();
     }
 }

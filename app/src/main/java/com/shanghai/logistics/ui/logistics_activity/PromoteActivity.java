@@ -1,6 +1,7 @@
 package com.shanghai.logistics.ui.logistics_activity;
 
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,6 +46,7 @@ public class PromoteActivity extends SimpleActivity {
                 break;
             case R.id.tv_promote:
                 PromotionPricePopup pricePopup = new PromotionPricePopup(this);
+                pricePopup.setBackgroundColor(R.color.transparent);
                 pricePopup.setItemClickListener(new PromotionPricePopup.ItemClickListener() {
                     @Override
                     public void onItemClick(View v) {

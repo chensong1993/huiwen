@@ -3,6 +3,7 @@ package com.shanghai.logistics.ui.logistics_activity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.shanghai.logistics.base.BaseActivity;
 import com.shanghai.logistics.base.connectors.logistics.LogisticsOrderDetailConnector;
 import com.shanghai.logistics.models.entity.ApiResponse;
 import com.shanghai.logistics.models.entity.logistics.LOrderEntity;
+import com.shanghai.logistics.models.http.Uploading;
 import com.shanghai.logistics.models.services.ApiService;
 import com.shanghai.logistics.models.services.LogisticsService;
 import com.shanghai.logistics.models.services.UserService;
@@ -33,6 +35,7 @@ import com.shanghai.logistics.ui.user_activity.home_detail.AddressActivity;
 import com.shanghai.logistics.ui.user_activity.home_detail.VehicleLengthActivity;
 import com.shanghai.logistics.util.DataUtil;
 import com.shanghai.logistics.util.FileUploadUtil;
+import com.shanghai.logistics.widget.BasePopup.ObjectionPopup;
 import com.shanghai.logistics.widget.BasePopup.TipPopup;
 
 import java.util.ArrayList;
@@ -110,6 +113,7 @@ public class NewOrderDetailActivity extends BaseActivity<LogisticsOrderDetailPre
     Intent intent;
     String orderNo;
     TipPopup tipPopup;
+    String rb;
 
     @Override
     protected int getLayout() {
@@ -120,16 +124,51 @@ public class NewOrderDetailActivity extends BaseActivity<LogisticsOrderDetailPre
     void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_refuse: //拒绝接单
-                uploadInfo(2);
+                ObjectionPopup popup = new ObjectionPopup(this);
+                popup.setItemClickListener(new ObjectionPopup.ItemClickListener() {
+                    @Override
+                    public void onItemClick(View view) {
+                        RadioButton button;
+                        switch (view.getId()) {
+                            case R.id.tv_cancel:
+                                popup.dismiss();
+                                break;
+                            case R.id.tv_confirm:
+                                uploadInfo(2);
+                                break;
+                            case R.id.rb_1:
+                                button = view.findViewById(R.id.rb_1);
+                                if (button.isChecked()) {
+                                    rb = button.getText().toString();
+                                }
+                                break;
+                            case R.id.rb_2:
+                                button = view.findViewById(R.id.rb_2);
+                                if (button.isChecked()) {
+                                    rb = button.getText().toString();
+                                }
+                                break;
+                            case R.id.rb_3:
+                                button = view.findViewById(R.id.rb_3);
+                                if (button.isChecked()) {
+                                    rb = button.getText().toString();
+                                }
+                                break;
+
+                        }
+                    }
+                });
+                popup.showPopupWindow();
                 break;
             case R.id.tv_confirm: //接单
                 tipPopup = new TipPopup(this);
+                tipPopup.setBackgroundColor(R.color.transparent);
                 tipPopup.setItemClickListener(new TipPopup.ItemClickListener() {
                     @Override
                     public void onItemClick(View view) {
                         switch (view.getId()) {
                             case R.id.tv_cancel:
-                                finish();
+                                tipPopup.dismiss();
                                 break;
                             case R.id.tv_confirm:
                                 uploadInfo(1);
@@ -137,6 +176,7 @@ public class NewOrderDetailActivity extends BaseActivity<LogisticsOrderDetailPre
                         }
                     }
                 });
+                tipPopup.showPopupWindow();
                 break;
             case R.id.img_back:
                 finish();
@@ -199,47 +239,79 @@ public class NewOrderDetailActivity extends BaseActivity<LogisticsOrderDetailPre
 
     @SuppressLint("CheckResult")
     private void uploadInfo(int type) {
-        Map<String, RequestBody> map = new HashMap<>();
-        map.put("orderNo", FileUploadUtil.requestBody(mTvOrderNum.getText().toString()));
-        map.put("type", FileUploadUtil.requestBody(type + ""));
-        map.put("refuseRemark", FileUploadUtil.requestBody(mEtName.getText().toString()));
+        Uploading.NewOrderDetail(orderNo, type, rb, new SingleObserver<ApiResponse<Integer>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
 
+            }
 
-        ApiService.getInstance()
-                .create(LogisticsService.class, Constants.MAIN_URL)
-                .storeDealWithOrder(map)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new SingleObserver<ApiResponse<Integer>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
+            @Override
+            public void onSuccess(ApiResponse<Integer> integer) {
+                switch (integer.getMsg()) {
+                    case 0:
+                        ToastUtils.show("上传失败");
+                        break;
+                    case 1:
+                        //  ToastUtils.show("上传成功");
+                        finish();
+                        break;
+                    case -1:
+                        ToastUtils.show("参数不能为空");
+                        break;
 
-                    }
+                }
+                Log.i(TAG, "onSuccess: " + integer.getMsg());
+            }
 
-                    @Override
-                    public void onSuccess(ApiResponse<Integer> integer) {
-                        switch (integer.getMsg()) {
-                            case 0:
-                                ToastUtils.show("上传失败");
-                                break;
-                            case 1:
-                                ToastUtils.show("上传成功");
-                                finish();
-                                break;
-                            case -1:
-                                ToastUtils.show("参数不能为空");
-                                break;
+            @Override
+            public void onError(Throwable e) {
+                Log.i(TAG, "onError: ");
+            }
 
-                        }
-                        Log.i(TAG, "onSuccess: " + integer.getMsg());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.i(TAG, "onError: ");
-                    }
-
-                });
+        });
+//        Map<String, RequestBody> map = new HashMap<>();
+//        Log.i(TAG, "uploadInfo: " + orderNo);
+//        map.put("orderNo", FileUploadUtil.requestBody(orderNo));
+//        map.put("type", FileUploadUtil.requestBody(type + ""));
+//        if (type == 2) {
+//            map.put("refuseRemark", FileUploadUtil.requestBody(rb));
+//        }
+//
+//        ApiService.getInstance()
+//                .create(LogisticsService.class, Constants.MAIN_URL)
+//                .storeDealWithOrder(map)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribeWith(new SingleObserver<ApiResponse<Integer>>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onSuccess(ApiResponse<Integer> integer) {
+//                        switch (integer.getMsg()) {
+//                            case 0:
+//                                ToastUtils.show("上传失败");
+//                                break;
+//                            case 1:
+//                                //  ToastUtils.show("上传成功");
+//                                finish();
+//                                break;
+//                            case -1:
+//                                ToastUtils.show("参数不能为空");
+//                                break;
+//
+//                        }
+//                        Log.i(TAG, "onSuccess: " + integer.getMsg());
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        Log.i(TAG, "onError: ");
+//                    }
+//
+//                });
     }
 
 

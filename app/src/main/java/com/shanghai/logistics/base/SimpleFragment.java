@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 
 import com.gyf.immersionbar.components.ImmersionOwner;
 import com.gyf.immersionbar.components.ImmersionProxy;
+import com.shanghai.logistics.app.App;
+import com.shanghai.logistics.app.Constants;
 
 import java.util.List;
 
@@ -31,6 +33,7 @@ public abstract class SimpleFragment extends SupportFragment  implements Immersi
     private Unbinder mUnBinder;
     protected boolean isInited = false;
     private static final String TAG="SimpleFragment";
+    public String mLoginPhone;
     /**
      * ImmersionBar代理类
      */
@@ -54,6 +57,9 @@ public abstract class SimpleFragment extends SupportFragment  implements Immersi
         super.onViewCreated(view, savedInstanceState);
         mUnBinder = ButterKnife.bind(this, view);
         isInited = true;
+        if (App.kv.decodeString(Constants.USER_PHONE) != null) {
+            mLoginPhone = App.kv.decodeString(Constants.USER_PHONE);
+        }
 
     }
 

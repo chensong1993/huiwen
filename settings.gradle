@@ -1,2 +1,2 @@
-include ':app', ':zxinglibrary', ':IMLib', ':IMKit', ':CallLib', ':CallKit', ':shareutil'
+include ':app', ':zxinglibrary',':shareutil'
 //, ':CallKit', ':IMKit', ':CallLib', ':IMLib'

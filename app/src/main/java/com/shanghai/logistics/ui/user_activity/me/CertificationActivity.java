@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -15,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -25,20 +25,21 @@ import com.hjq.toast.ToastUtils;
 import com.shanghai.logistics.R;
 import com.shanghai.logistics.app.Constants;
 import com.shanghai.logistics.base.BaseActivity;
-import com.shanghai.logistics.base.SimpleActivity;
-import com.shanghai.logistics.base.connectors.user.UserCertificationConnector;
+import com.shanghai.logistics.base.connectors.user.UserPersonalCertificationConnector;
 import com.shanghai.logistics.models.entity.ApiResponse;
+import com.shanghai.logistics.models.entity.user.PersonalCertification;
+import com.shanghai.logistics.models.http.Uploading;
 import com.shanghai.logistics.models.services.ApiService;
 import com.shanghai.logistics.models.services.UserService;
-import com.shanghai.logistics.presenters.user.UserCertificationPresenter;
+import com.shanghai.logistics.presenters.user.UserPersonalCertificationPresenter;
 import com.shanghai.logistics.util.DataUtil;
 import com.shanghai.logistics.util.FileUploadUtil;
-import com.shanghai.logistics.util.ImageUtil;
 import com.shanghai.logistics.util.PhotoUtils;
 import com.shanghai.logistics.widget.BasePopup.ImagePopup;
-import com.shanghai.logistics.widget.CommonSubscriber;
 
 import java.io.File;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -50,32 +51,52 @@ import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 /*
- * 认证
+ * 用户认证
  * */
-public class CertificationActivity extends SimpleActivity {
-    static final String TAG = CertificationActivity.class.getName();
+public class CertificationActivity extends BaseActivity<UserPersonalCertificationPresenter> implements UserPersonalCertificationConnector.View {
+    static final String TAG = "CertificationActivity";
+    @BindView(R.id.ll_top)
+    LinearLayout mLlTop;
+    @BindView(R.id.ll_top_t)
+    LinearLayout mLlTopT;
     @BindView(R.id.img_identity)
     ImageView mImgIdentity;
     @BindView(R.id.img_identity_card)
     ImageView mImgIdentityCard;
     @BindView(R.id.img_identity_card_b)
     ImageView mImgIdentityCardB;
+
+    @BindView(R.id.img_identity_t)
+    ImageView mImgIdentityT;
+    @BindView(R.id.img_identity_card_t)
+    ImageView mImgIdentityCardT;
+    @BindView(R.id.img_identity_card_b_t)
+    ImageView mImgIdentityCardBT;
+
     @BindView(R.id.tv_title)
     TextView mTvTitle;
+    @BindView(R.id.tv_certification)
+    TextView mTvConfirm;
     @BindView(R.id.et_name)
-    EditText mEtName;
+    TextView mTvName;
     @BindView(R.id.et_id_card_num)
+    TextView mTvIdCareNum;
+
+    @BindView(R.id.et_name_t)
+    EditText mEtName;
+    @BindView(R.id.et_id_card_num_t)
     EditText mEtIdCareNum;
+    @BindView(R.id.tv_certification_t)
+    TextView mTvConfirmT;
     File nativeFile, ZFile, HFile;
     Uri imageUri;
     int typeFile;
     MediaSelector.MediaOptions mediaOptions;
     ImagePopup imagePopup;
+    int isCertification;
 
     @Override
     protected int getLayout() {
@@ -86,31 +107,104 @@ public class CertificationActivity extends SimpleActivity {
     @Override
     protected void initEventAndData() {
         mTvTitle.setText("认证");
+        //查询是否认证通过
+        mPresenter.getUserInfo(mLoginPhone);
     }
 
 
-    @OnClick({R.id.img_identity, R.id.img_back, R.id.tv_certification, R.id.img_identity_card, R.id.img_identity_card_b})
+    @OnClick({R.id.tv_certification_t, R.id.img_identity_t, R.id.img_back, R.id.tv_certification, R.id.img_identity_card_t, R.id.img_identity_card_b_t})
     void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_back:
                 finish();
                 break;
-            case R.id.tv_certification:
-                uploadInfo();
+            case R.id.tv_certification: //跳转到修改资料
+                mLlTopT.setVisibility(View.VISIBLE);
+                mLlTop.setVisibility(View.GONE);
+                mTvConfirmT.setVisibility(View.VISIBLE);
+                mTvConfirm.setVisibility(View.GONE);
                 Log.i(TAG, "onItemClick: ");
                 break;
-            case R.id.img_identity: //上身照
+            case R.id.tv_certification_t: //提交修改资料
+                if (nativeFile == null) {
+                    ToastUtils.show("头像未上传");
+                    return;
+                }
+                if (ZFile == null) {
+                    ToastUtils.show("身份证正面未上传");
+                    return;
+                }
+                if (HFile == null) {
+                    ToastUtils.show("身份证背面未上传");
+                    return;
+                }
+
+                if (mEtName.getText().toString().isEmpty()) {
+                    ToastUtils.show("未填写姓名");
+                    return;
+                }
+                if (mEtIdCareNum.getText().toString().isEmpty()) {
+                    ToastUtils.show("未填写身份证信息");
+                    return;
+                }
+                if (isCertification == 1) {
+                    changeInfo();
+                } else {
+                    uploadInfo();
+                }
+                break;
+            case R.id.img_identity_t: //上身照
                 ImgUpload(0);
                 break;
-            case R.id.img_identity_card: //身份证正面
+            case R.id.img_identity_card_t: //身份证正面
                 ImgUpload(1);
                 break;
-            case R.id.img_identity_card_b: //身份证背面
+            case R.id.img_identity_card_b_t: //身份证背面
                 ImgUpload(2);
                 break;
         }
     }
 
+    @Override
+    public void UserInfo(PersonalCertification userInfo) {
+        isCertification = 1;
+        mTvConfirm.setText("修改认证");
+        Glide.with(this).load(Constants.MAIN_URL + userInfo.getHeadImgUrl()).into(mImgIdentity);
+        Glide.with(this).load(Constants.MAIN_URL + userInfo.getIDCardImgFront()).into(mImgIdentityCard);
+        Glide.with(this).load(Constants.MAIN_URL + userInfo.getIDCardImgReverse()).into(mImgIdentityCardB);
+        mTvIdCareNum.setText(userInfo.getIDCardNum());
+        mTvName.setText(userInfo.getRealName());
+        mLlTop.setVisibility(View.VISIBLE);
+        mLlTopT.setVisibility(View.GONE);
+        mTvConfirm.setVisibility(View.VISIBLE);
+
+        Log.i(TAG, "UserInfo: "+userInfo.toString());
+    }
+
+    @Override
+    public void UserInfoErr(String s) {
+        int msg = Integer.valueOf(s);
+        Log.i(TAG, "UserInfoErr: " + msg);
+        switch (msg) {
+            case 0:
+                isCertification = 0;
+                mLlTop.setVisibility(View.GONE);
+                mLlTopT.setVisibility(View.VISIBLE);
+                mTvConfirm.setVisibility(View.GONE);
+                mTvConfirmT.setVisibility(View.VISIBLE);
+                mTvConfirmT.setText("提交审核");
+                break;
+            case -1:
+                isCertification = -1;
+                mLlTop.setVisibility(View.GONE);
+                mLlTopT.setVisibility(View.VISIBLE);
+                mTvConfirm.setVisibility(View.GONE);
+                mTvConfirmT.setVisibility(View.VISIBLE);
+                mTvConfirmT.setText("提交审核");
+                break;
+
+        }
+    }
 
     void ImgUpload(int type) {
         typeFile = type;
@@ -173,21 +267,21 @@ public class CertificationActivity extends SimpleActivity {
                 String time = DataUtil.dateToStr(new Date());
                 switch (typeFile) {
                     case 0:
-                        nativeFile = new File(Environment.getExternalStorageDirectory().getPath() + "/+" + time + ".jpg");
+                        nativeFile = new File(Environment.getExternalStorageDirectory().getPath() + "/" + time + ".jpg");
                         imageUri = Uri.fromFile(nativeFile);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                             imageUri = FileProvider.getUriForFile(this, Constants.FILE_PROVIDER, nativeFile);//通过FileProvider创建一个content类型的Uri
                         PhotoUtils.takePicture(this, imageUri, Constants.CODE_CAMERA_REQUEST);
                         break;
                     case 1:
-                        ZFile = new File(Environment.getExternalStorageDirectory().getPath() + "/+" + time + ".jpg");
+                        ZFile = new File(Environment.getExternalStorageDirectory().getPath() + "/" + time + ".jpg");
                         imageUri = Uri.fromFile(ZFile);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                             imageUri = FileProvider.getUriForFile(this, Constants.FILE_PROVIDER, ZFile);//通过FileProvider创建一个content类型的Uri
                         PhotoUtils.takePicture(this, imageUri, Constants.CODE_CAMERA_REQUEST);
                         break;
                     case 2:
-                        HFile = new File(Environment.getExternalStorageDirectory().getPath() + "/+" + time + ".jpg");
+                        HFile = new File(Environment.getExternalStorageDirectory().getPath() + "/" + time + ".jpg");
                         imageUri = Uri.fromFile(HFile);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
                             imageUri = FileProvider.getUriForFile(this, Constants.FILE_PROVIDER, HFile);//通过FileProvider创建一个content类型的Uri
@@ -276,7 +370,7 @@ public class CertificationActivity extends SimpleActivity {
                 case 0:
                     for (int i = 0; i < mediaList.size(); i++) {
                         nativeFile = new File(mediaList.get(i).filePath);
-                        Glide.with(this).load(mediaList.get(i).filePath).into(mImgIdentity);
+                        Glide.with(this).load(mediaList.get(i).filePath).into(mImgIdentityT);
                         Log.i(TAG, "onActivityResult: " + nativeFile.getAbsolutePath());
 
                     }
@@ -284,7 +378,7 @@ public class CertificationActivity extends SimpleActivity {
                 case 1:
                     for (int i = 0; i < mediaList.size(); i++) {
                         ZFile = new File(mediaList.get(i).filePath);
-                        Glide.with(this).load(mediaList.get(i).filePath).into(mImgIdentityCard);
+                        Glide.with(this).load(mediaList.get(i).filePath).into(mImgIdentityCardT);
                         Log.i(TAG, "onActivityResult: " + ZFile.getAbsolutePath());
 
                     }
@@ -292,7 +386,7 @@ public class CertificationActivity extends SimpleActivity {
                 case 2:
                     for (int i = 0; i < mediaList.size(); i++) {
                         HFile = new File(mediaList.get(i).filePath);
-                        Glide.with(this).load(mediaList.get(i).filePath).into(mImgIdentityCardB);
+                        Glide.with(this).load(mediaList.get(i).filePath).into(mImgIdentityCardBT);
                         Log.i(TAG, "onActivityResult: " + HFile.getAbsolutePath());
 
                     }
@@ -305,7 +399,7 @@ public class CertificationActivity extends SimpleActivity {
                 case 0:
                     if (nativeFile != null) {
                         Log.i(TAG, "onActivityResult: " + nativeFile);
-                        Glide.with(this).load(nativeFile).into(mImgIdentity);
+                        Glide.with(this).load(nativeFile).into(mImgIdentityT);
                     } else {
                         ToastUtils.show("获取照片失败");
                     }
@@ -313,7 +407,7 @@ public class CertificationActivity extends SimpleActivity {
                 case 1:
                     if (ZFile != null) {
                         Log.i(TAG, "onActivityResult: " + ZFile);
-                        Glide.with(this).load(ZFile).into(mImgIdentityCard);
+                        Glide.with(this).load(ZFile).into(mImgIdentityCardT);
                     } else {
                         ToastUtils.show("获取照片失败");
                     }
@@ -321,7 +415,7 @@ public class CertificationActivity extends SimpleActivity {
                 case 2:
                     if (HFile != null) {
                         Log.i(TAG, "onActivityResult: " + HFile);
-                        Glide.with(this).load(HFile).into(mImgIdentityCardB);
+                        Glide.with(this).load(HFile).into(mImgIdentityCardBT);
                     } else {
                         ToastUtils.show("获取照片失败");
                     }
@@ -331,24 +425,14 @@ public class CertificationActivity extends SimpleActivity {
         }
     }
 
+    //提交认证
     @SuppressLint("CheckResult")
     private void uploadInfo() {
-        File[] files = {nativeFile, ZFile, HFile};
-        Map<String, RequestBody> map = new HashMap<>();
-        String[] fileName = {"headImgUrl", "IDCardImgFront", "IDCardImgReverse"};
-        map.put("phone", FileUploadUtil.requestBody("17621147953"));
-        map.put("IDCardNum", FileUploadUtil.requestBody(mEtIdCareNum.getText().toString()));
-        map.put("realName", FileUploadUtil.requestBody(mEtName.getText().toString()));
-        Log.i(TAG, "uploadInfo: "+nativeFile.getPath());
-        ApiService.getInstance()
-                .create(UserService.class, Constants.MAIN_URL)
-                .userCertification(FileUploadUtil.uploadInfo(fileName, map, files))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new SingleObserver<ApiResponse<Integer>>() {
+        Uploading.UserCertification(nativeFile, ZFile, HFile, mLoginPhone, mEtIdCareNum.getText().toString(),
+                mEtName.getText().toString(), new SingleObserver<ApiResponse<Integer>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-                        //  Log.i(TAG, "onSubscribe: ");
+
                     }
 
                     @Override
@@ -359,12 +443,13 @@ public class CertificationActivity extends SimpleActivity {
                                 break;
                             case 1:
                                 ToastUtils.show("上传成功");
+                                finish();
                                 break;
                             case -1:
                                 ToastUtils.show("参数不能为空");
                                 break;
-                            case -2:
-                                ToastUtils.show("账号已经注册过");
+                            default:
+                                ToastUtils.show("上传失败");
                                 break;
                         }
                         Log.i(TAG, "onSuccess: " + integer.getMsg());
@@ -376,9 +461,53 @@ public class CertificationActivity extends SimpleActivity {
                     }
 
                 });
+
     }
 
+    //修改信息
+    @SuppressLint("CheckResult")
+    private void changeInfo() {
+        Uploading.UserUpCertification(nativeFile, ZFile, HFile, mLoginPhone, mEtIdCareNum.getText().toString(),
+                mEtName.getText().toString(), new SingleObserver<ApiResponse<Integer>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
+                    }
+
+                    @Override
+                    public void onSuccess(ApiResponse<Integer> integer) {
+                        switch (integer.getMsg()) {
+                            case 0:
+                                ToastUtils.show("上传失败");
+                                break;
+                            case 1:
+                                ToastUtils.show("上传成功");
+                                finish();
+                                break;
+                            case -1:
+                                ToastUtils.show("参数不能为空");
+                                break;
+                            default:
+                                ToastUtils.show("上传失败");
+                                break;
+                        }
+                        Log.i(TAG, "onSuccess: " + integer.getMsg());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.i(TAG, "onError: ");
+                    }
+
+                });
+
+
+    }
+
+    @Override
+    protected void initInject() {
+        getActivityComponent().inject(this);
+    }
 
 
 }

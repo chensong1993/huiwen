@@ -56,6 +56,8 @@ public class LogisticsMeFragment extends BaseFragment<LogisticsUserInfoPresenter
     TextView mTvName;
     @BindView(R.id.tv_companyName)
     TextView mTvCompanyName;
+    @BindView(R.id.tv_is_user)
+    TextView mTvIsUser;
     @BindView(R.id.tv_storeServicePoint)
     TextView mTvStoreServicePoint;
     @BindView(R.id.ll_address_list)
@@ -72,17 +74,23 @@ public class LogisticsMeFragment extends BaseFragment<LogisticsUserInfoPresenter
     RecyclerView mRvMyShop;
     LogisticsMyShopAdapter myShopAdapter;
     List<LUserInfoEntity.Store> mUserInfoEntityList;
+    Intent intent;
+    Bundle bundle;
 
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_logistics_me;
     }
 
-    @OnClick({R.id.tv_qr, R.id.ll_add_shop, R.id.ll_promote, R.id.ll_team_manage, R.id.ll_comment_manage, R.id.img_back, R.id.tv_right_content, R.id.ll_address_list, R.id.ll_switching_identity})
+    @OnClick({R.id.ll_qr, R.id.ll_add_shop, R.id.ll_promote, R.id.ll_team_manage, R.id.ll_comment_manage, R.id.img_back, R.id.tv_right_content, R.id.ll_address_list, R.id.ll_switching_identity})
     void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_qr: //二维码
-                startActivity(new Intent(getActivity(), QRCodesActivity.class));
+            case R.id.ll_qr: //二维码
+                intent = new Intent(getActivity(), QRCodesActivity.class);
+                bundle = new Bundle();
+                bundle.putInt(Constants.ACTIVITY_TYPE, Constants.OPERATING_CENTER_FRAGMENT);
+                intent.putExtra(Constants.ACTIVITY_TYPE, bundle);
+                startActivity(intent);
                 break;
             case R.id.img_back:
                 getActivity().finish();
@@ -106,7 +114,11 @@ public class LogisticsMeFragment extends BaseFragment<LogisticsUserInfoPresenter
                 startActivity(new Intent(getActivity(), PromoteActivity.class));
                 break;
             case R.id.ll_add_shop: //添加商铺
-                startActivity(new Intent(getActivity(), AddStoresActivity.class));
+                intent = new Intent(getActivity(), AddStoresActivity.class);
+                bundle = new Bundle();
+                bundle.putInt(Constants.ACTIVITY_TYPE, Constants.LOGISTICS_ME_FRAGMENT);
+                intent.putExtra(Constants.ACTIVITY_TYPE, bundle);
+                startActivity(intent);
                 break;
 
         }
@@ -119,8 +131,29 @@ public class LogisticsMeFragment extends BaseFragment<LogisticsUserInfoPresenter
         Glide.with(getActivity()).load(Constants.MAIN_URL + entities.getHeadImgUrl()).into(mImgHead);
         mTvName.setText(entities.getRealName());
         mTvCompanyName.setText(entities.getCompanyName());
+        switch (entities.getIsUser()){
+            case 0:
+                mTvIsUser.setText("未提交");
+                break;
+            case 1:
+                mTvIsUser.setText("审核中");
+                break;
+            case 2:
+               // mTvIsUser.setText("通过");
+                break;
+            case 3:
+                mTvIsUser.setText("未通过");
+                break;
+        }
+
         mTvStoreServicePoint.setText(entities.getStoreServicePoint());
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.getLogisticsUserInfo(mLoginPhone);
     }
 
     @Override
@@ -130,7 +163,7 @@ public class LogisticsMeFragment extends BaseFragment<LogisticsUserInfoPresenter
 
     @Override
     protected void initEventAndData() {
-        mPresenter.getLogisticsUserInfo("15169169195");
+        mPresenter.getLogisticsUserInfo(mLoginPhone);
         mTvTitle.setText("我的");
         mTvRightText.setVisibility(View.VISIBLE);
         mTvRightText.setText("认证");

@@ -55,6 +55,8 @@ public class OperatingCenterFragment extends SimpleFragment {
     LinearLayout mLlScan;
     @BindView(R.id.ll_myQRCodes)
     LinearLayout mLlMyQRCodes;
+    @BindView(R.id.ll_kaidan)
+    LinearLayout mLlKaidan;
     //开单
     @BindView(R.id.ll_billing)
     LinearLayout mLlBilling;
@@ -78,9 +80,12 @@ public class OperatingCenterFragment extends SimpleFragment {
         return R.layout.fragment_operating__center;
     }
 
-    @OnClick({R.id.ll_scan, R.id.ll_myQRCodes, R.id.ll_billing, R.id.ll_waybill, R.id.ll_start_recording, R.id.ll_astern_record})
+    @OnClick({R.id.ll_kaidan,R.id.ll_scan, R.id.ll_myQRCodes, R.id.ll_billing, R.id.ll_waybill, R.id.ll_start_recording, R.id.ll_astern_record})
     void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ll_kaidan://顶部开单
+                startActivity(new Intent(getActivity(), BillingActivity.class));
+                break;
             case R.id.ll_scan: //扫一扫
                // choicePhotoWrapper();
                 intent = new Intent(getActivity(), CaptureActivity.class);

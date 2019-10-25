@@ -40,6 +40,8 @@ public class UserMeFragment extends BaseFragment<UserUserInfoPresenter> implemen
     ImageView mImgHead;
     @BindView(R.id.tv_name)
     TextView mTvName;
+    @BindView(R.id.tv_renzheng)
+    TextView mTvRenZheng;
     @BindView(R.id.tv_user_service_point)
     TextView mTvUserServicePoint;
 //    @BindView(R.id.ll_switching_identity)
@@ -70,7 +72,7 @@ public class UserMeFragment extends BaseFragment<UserUserInfoPresenter> implemen
 
     @Override
     protected void initEventAndData() {
-        mPresenter.getUserInfo("15169169195");
+        mPresenter.getUserInfo(mLoginPhone);
         mTvRightText.setVisibility(View.VISIBLE);
         mTvRightText.setText("认证");
     }
@@ -79,8 +81,26 @@ public class UserMeFragment extends BaseFragment<UserUserInfoPresenter> implemen
     public void UserInfo(UserInfoEntity userInfo) {
         mTvName.setText(userInfo.getRealName());
         mTvUserServicePoint.setText(userInfo.getUserServicePoint() + "");
-       Glide.with(getActivity()).load(Constants.MAIN_URL+userInfo.getHeadImgUrl()).into(mImgHead);
-        Log.i(TAG, "UserInfo: "+userInfo.getHeadImgUrl());
+        switch (userInfo.getIsUser()) {
+            case 0:
+                mTvRenZheng.setText("");
+                break;
+            case 1:
+                mTvRenZheng.setText("审核中");
+                break;
+            case 2:
+                mTvRenZheng.setText("");
+                break;
+            case 3:
+                mTvRenZheng.setText("审核未通过");
+                break;
+            default:
+                mTvRenZheng.setText("");
+                break;
+        }
+
+        Glide.with(getActivity()).load(Constants.MAIN_URL + userInfo.getHeadImgUrl()).into(mImgHead);
+        Log.i(TAG, "UserInfo: " + userInfo.getHeadImgUrl());
     }
 
     @Override

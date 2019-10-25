@@ -1,10 +1,19 @@
 package com.shanghai.logistics.util;
 
+import android.app.Activity;
+import android.app.AppOpsManager;
+import android.app.usage.NetworkStatsManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.provider.Settings;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -14,6 +23,7 @@ import com.shanghai.logistics.app.App;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 public class SystemUtil {
 
@@ -26,6 +36,7 @@ public class SystemUtil {
                 .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
         return wifiInfo != null;
     }
+
     /**
      * 检查手机网络(4G/3G/2G)是否连接
      */
@@ -35,6 +46,7 @@ public class SystemUtil {
                 .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
         return mobileNetworkInfo != null;
     }
+
     /**
      * 检查是否有可用网络
      */
@@ -45,6 +57,7 @@ public class SystemUtil {
 
     /**
      * 保存文字到剪贴板
+     *
      * @param context
      * @param text
      */
@@ -54,7 +67,6 @@ public class SystemUtil {
         manager.setPrimaryClip(clipData);
 //        ToastUtil.shortShow("已复制到剪贴板");
     }
-
 
 
     /**
@@ -120,4 +132,6 @@ public class SystemUtil {
 
         }
     }
+
+
 }

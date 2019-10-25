@@ -1,9 +1,11 @@
 package com.shanghai.logistics.ui.adapter.main;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.ViewGroup;
+
 import com.shanghai.logistics.ui.mian_fragment.AddressListFragment;
 import com.shanghai.logistics.ui.mian_fragment.DynamicFragment;
 import com.shanghai.logistics.ui.mian_fragment.MainMeFragment;
@@ -15,6 +17,16 @@ import java.util.ArrayList;
  * @author
  */
 public class MainViewPagerAdapter extends FragmentPagerAdapter {
+
+
+    public MainViewPagerAdapter(FragmentManager fm, Bundle bundle) {
+        super(fm);
+        fragments.clear();
+        fragments.add(new MessageFragment(bundle));
+        fragments.add(new AddressListFragment());
+        fragments.add(new DynamicFragment());
+        fragments.add(new MainMeFragment());
+    }
 
     private ArrayList<Fragment> fragments = new ArrayList<>();
     private Fragment currentFragment;

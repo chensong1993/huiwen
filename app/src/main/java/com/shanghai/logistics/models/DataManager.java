@@ -1,7 +1,9 @@
 package com.shanghai.logistics.models;
 
+import com.shanghai.logistics.models.entity.ApiDataResponse;
 import com.shanghai.logistics.models.entity.ApiResponse;
 import com.shanghai.logistics.models.entity.LoginEntity;
+import com.shanghai.logistics.models.entity.logistics.LEnterpriseInfo;
 import com.shanghai.logistics.models.entity.logistics.LOrderEntity;
 import com.shanghai.logistics.models.entity.logistics.LStoreInfoEntity;
 import com.shanghai.logistics.models.entity.logistics.LUserInfoEntity;
@@ -9,10 +11,12 @@ import com.shanghai.logistics.models.entity.main.FriendEntity;
 import com.shanghai.logistics.models.entity.main.NewFriendEntity;
 import com.shanghai.logistics.models.entity.user.AddressListEntity;
 import com.shanghai.logistics.models.entity.user.BrandLineEntity;
+import com.shanghai.logistics.models.entity.user.CarLengthEntity;
 import com.shanghai.logistics.models.entity.user.CarModelEntity;
 import com.shanghai.logistics.models.entity.user.CommentEntity;
 import com.shanghai.logistics.models.entity.user.HomeListEntity;
 import com.shanghai.logistics.models.entity.user.LinePhoneEntity;
+import com.shanghai.logistics.models.entity.user.PersonalCertification;
 import com.shanghai.logistics.models.entity.user.SpecialEntity;
 import com.shanghai.logistics.models.entity.user.UserInfoEntity;
 import com.shanghai.logistics.models.entity.user.UserShopEntity;
@@ -46,7 +50,7 @@ public class DataManager implements HttpHelper {
     }
 
     @Override
-    public Flowable<ApiResponse<LoginEntity>> getRegister(String phone, String password, String code, String nickName) {
+    public Flowable<ApiResponse<String>> getRegister(String phone, String password, String code, String nickName) {
         return mHttpHelper.getRegister(phone, password, code, nickName);
     }
 
@@ -124,8 +128,13 @@ public class DataManager implements HttpHelper {
     }
 
     @Override
-    public Flowable<ApiResponse<List<CarModelEntity>>> getCarModel() {
+    public Flowable<ApiDataResponse<List<CarModelEntity>>> getCarModel() {
         return mHttpHelper.getCarModel();
+    }
+
+    @Override
+    public Flowable<ApiDataResponse<List<CarLengthEntity>>> getCarLength() {
+        return mHttpHelper.getCarLength();
     }
 
     @Override
@@ -150,12 +159,22 @@ public class DataManager implements HttpHelper {
 
     @Override
     public Flowable<ApiResponse<LStoreInfoEntity>> getLStoreInfo(String storeId, int type) {
-        return mHttpHelper.getLStoreInfo(storeId,type);
+        return mHttpHelper.getLStoreInfo(storeId, type);
     }
 
     @Override
     public Flowable<ApiResponse<LOrderEntity>> orderInfoDetail(String orderNo) {
         return mHttpHelper.orderInfoDetail(orderNo);
+    }
+
+    @Override
+    public Flowable<ApiResponse<PersonalCertification>> userPersonalCertification(String phone) {
+        return mHttpHelper.userPersonalCertification(phone);
+    }
+
+    @Override
+    public Flowable<ApiResponse<LEnterpriseInfo>> enterpriseInfo(String phone) {
+        return mHttpHelper.enterpriseInfo(phone);
     }
 
 

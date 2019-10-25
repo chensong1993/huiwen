@@ -11,8 +11,7 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_marginBottom="100dp">
+        android:layout_marginTop="50dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,10 +20,18 @@
             android:focusableInTouchMode="true"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_10"
+                android:text="请上传两张图片"/>
+            <include layout="@layout/item_select_image" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/img_main"
@@ -37,9 +44,9 @@
                 <ImageView
                     android:id="@+id/img_detail"
                     android:layout_width="80dp"
-                    android:background="@color/hui"
                     android:layout_height="80dp"
-                    android:scaleType="fitXY"  />
+                    android:background="@color/hui"
+                    android:scaleType="fitXY" />
             </LinearLayout>
 
             <TextView
@@ -52,8 +59,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/null_drawable"
-                android:padding="10dp"
                 android:hint="请输入商品名称"
+                android:padding="10dp"
                 android:textColor="@color/black"
                 android:textSize="14dp" />
 
@@ -67,8 +74,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/null_drawable"
-                android:padding="10dp"
                 android:hint="请输入商品简介"
+                android:padding="10dp"
                 android:textColor="@color/black"
                 android:textSize="14dp" />
 
@@ -107,6 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/item_stroke_black"
+                    android:inputType="numberDecimal"
                     android:padding="10dp"
                     android:textColor="@color/black"
                     android:textSize="14dp" />
@@ -143,6 +151,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/item_stroke_black"
+                    android:inputType="number"
                     android:padding="10dp"
                     android:textColor="@color/black"
                     android:textSize="14dp" />
@@ -206,6 +215,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="10dp"
                     android:background="@drawable/item_stroke_black"
+                    android:inputType="number"
                     android:padding="10dp"
                     android:textColor="@color/black"
                     android:textSize="14dp" />
@@ -264,7 +274,7 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="上架"
@@ -288,7 +298,7 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="会否营业"
@@ -312,7 +322,7 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="是否推广"
@@ -328,69 +338,78 @@
                     android:thumb="@drawable/shape_gray_thumb"
                     android:track="@drawable/selector_track" />
             </LinearLayout>
+
+            <EditText
+                android:id="@+id/et_jiedan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_10"
+                android:hint="@string/jiedan" />
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:padding="@dimen/dp_10">-->
+
+               <!---->
+            <!--</LinearLayout>-->
+
+            <LinearLayout
+                android:id="@+id/ll_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dp_10"
+                android:visibility="gone"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/red" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="添加手机号"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_order"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/red" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="接单人"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/red"
+                android:gravity="center"
+                android:layout_marginTop="50dp"
+                android:text="提交审核"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
+
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
-    <TextView
-        android:id="@+id/tv_confirm"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/red"
-        android:gravity="center"
-        android:text="提交审核"
-        android:textColor="@color/white"
-        android:textSize="16dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/tv_confirm"
-        android:background="@color/white"
-        android:orientation="horizontal"
-        android:padding="@dimen/dp_10">
-
-        <LinearLayout
-            android:id="@+id/ll_order"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginRight="5dp"
-                android:background="@color/red" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="接单人"
-                android:textColor="@color/black" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/ll_phone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_marginRight="5dp"
-                android:background="@color/red" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="电话"
-                android:textColor="@color/black" />
-        </LinearLayout>
-    </LinearLayout>
 </RelativeLayout>

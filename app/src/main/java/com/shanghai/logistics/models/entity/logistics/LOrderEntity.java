@@ -17,7 +17,7 @@ public class LOrderEntity implements Serializable {
 
     private String remark;
 
-    private int estimatedCost;
+    private float estimatedCost;
 
     private int startDeliveryType;
 
@@ -89,10 +89,10 @@ public class LOrderEntity implements Serializable {
     public String getRemark(){
         return this.remark;
     }
-    public void setEstimatedCost(int estimatedCost){
+    public void setEstimatedCost(float estimatedCost){
         this.estimatedCost = estimatedCost;
     }
-    public int getEstimatedCost(){
+    public float getEstimatedCost(){
         return this.estimatedCost;
     }
     public void setStartDeliveryType(int startDeliveryType){

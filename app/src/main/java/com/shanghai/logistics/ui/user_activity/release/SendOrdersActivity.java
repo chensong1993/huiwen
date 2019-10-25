@@ -38,6 +38,10 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.RequestBody;
 
+/**
+ * 用户派单
+ *
+ */
 public class SendOrdersActivity extends SimpleActivity {
 
     @BindView(R.id.img_back)
@@ -137,7 +141,7 @@ public class SendOrdersActivity extends SimpleActivity {
     @SuppressLint("CheckResult")
     private void sendOrder() {
 //        Map<String, RequestBody> map = new HashMap<>();
-//        map.put("userAccount", FileUploadUtil.requestBody("15169169195"));
+//        map.put("userAccount", FileUploadUtil.requestBody(mLoginPhone));
 //        map.put("startUserName", FileUploadUtil.requestBody());
 //        map.put("startPhone", FileUploadUtil.requestBody());
 //        map.put("startAddress", FileUploadUtil.requestBody());

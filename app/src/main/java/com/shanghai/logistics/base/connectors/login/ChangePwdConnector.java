@@ -6,9 +6,9 @@ import com.shanghai.logistics.models.entity.LoginEntity;
 
 public interface ChangePwdConnector {
     interface View extends BaseView {
-        void changePwd();
+        void changePwd(int msg);
 
-        void sendCodeData();
+        void sendCodeData(int msg);
 
         void sendCodeErr(String msg);
 

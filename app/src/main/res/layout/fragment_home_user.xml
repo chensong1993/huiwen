@@ -26,10 +26,10 @@
                 <TextView
                     android:id="@+id/tv_brand"
                     android:layout_width="0dp"
-                    android:layout_height="50dp"
+                    android:layout_height="60dp"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:background="@color/black"
+                    android:background="@drawable/ic_pinpai"
                     android:gravity="center"
                     android:text="品牌物流"
                     android:textColor="@color/white" />
@@ -37,10 +37,10 @@
                 <TextView
                     android:id="@+id/tv_special"
                     android:layout_width="0dp"
-                    android:layout_height="50dp"
+                    android:layout_height="60dp"
                     android:layout_margin="10dp"
                     android:layout_weight="1"
-                    android:background="@color/black"
+                    android:background="@drawable/ic_zhuanxian"
                     android:gravity="center"
                     android:text="专线物流"
                     android:textColor="@color/white" />

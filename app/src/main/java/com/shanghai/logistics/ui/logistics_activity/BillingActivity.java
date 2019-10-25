@@ -19,10 +19,16 @@ import com.shanghai.logistics.base.BaseFragment;
 import com.shanghai.logistics.base.SimpleActivity;
 import com.shanghai.logistics.base.connectors.logistics.LogisticsOrderInfoConnector;
 import com.shanghai.logistics.models.entity.logistics.LOrderEntity;
+import com.shanghai.logistics.models.entity.rxbus.BillingEvent;
 import com.shanghai.logistics.presenters.logistics.LogisticsOrderInfoPresenter;
 import com.shanghai.logistics.ui.logistics_adapter.LOrderListAdapter;
 import com.shanghai.logistics.ui.user_activity.home_detail.PlaceAnOrderActivity;
+import com.shanghai.logistics.util.DestroyActivityUtil;
 import com.shanghai.logistics.util.RvLineUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +37,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /*
- * 开单
+ * 开单 待入库
  * */
 public class BillingActivity extends BaseActivity<LogisticsOrderInfoPresenter> implements LogisticsOrderInfoConnector.View {
     private static final String TAG = "BillingActivity";
@@ -52,8 +58,9 @@ public class BillingActivity extends BaseActivity<LogisticsOrderInfoPresenter> i
 
     @Override
     protected void initEventAndData() {
+      //  EventBus.getDefault().register(this);
         mTvTitle.setText("待入库");
-        mPresenter.getLogisticsOrderInfo("15169169195", 3, 1);
+        mPresenter.getLogisticsOrderInfo(mLoginPhone, 3, 1);
         mOrderEntityList = new ArrayList<>();
         mLOrderListAdapter = new LOrderListAdapter(mOrderEntityList);
         mRvBilling.setAdapter(mLOrderListAdapter);
@@ -64,7 +71,7 @@ public class BillingActivity extends BaseActivity<LogisticsOrderInfoPresenter> i
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(BillingActivity.this, PlaceAnOrderActivity.class);
                 Bundle bundle = new Bundle();
-                bundle.putSerializable(Constants.BILLING_VALUE,mLOrderListAdapter.getData().get(position));
+                bundle.putSerializable(Constants.BILLING_VALUE, mLOrderListAdapter.getData().get(position));
                 bundle.putInt(Constants.ACTIVITY_TYPE, Constants.BILLING_ACTIVITY);
                 intent.putExtra(Constants.ACTIVITY_TYPE, bundle);
                 startActivity(intent);
@@ -75,18 +82,34 @@ public class BillingActivity extends BaseActivity<LogisticsOrderInfoPresenter> i
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.getLogisticsOrderInfo("15169169195", 3, 1);
+        Log.i(TAG, "onResume: ");
+        mPresenter.getLogisticsOrderInfo(mLoginPhone, 3, 1);
     }
+
+    //入库成功后刷新
+//    @Subscribe
+//    public void EventRefreshData(BillingEvent event) {
+//        if (event.getIsOk() == 1) {
+//            Log.i(TAG, "event: ");
+//            mPresenter.getLogisticsOrderInfo(mLoginPhone, 3, 1);
+//        }
+//    }
 
     @Override
     public void LogisticsOrderInfo(List<LOrderEntity> entities) {
         mLOrderListAdapter.setNewData(entities);
-        Log.i(TAG, "LogisticsOrderInfo: "+entities.size());
+
+        Log.i(TAG, "LogisticsOrderInfo: " + entities.size());
     }
 
     @Override
     public void LogisticsOrderInfoErr(String s) {
-        Log.i(TAG, "LogisticsOrderInfoErr: ");
+        switch (s){
+            case "0":
+                mLOrderListAdapter.setNewData(null);
+                break;
+        }
+        Log.i(TAG, "LogisticsOrderInfoErr: "+s);
     }
 
     @OnClick({R.id.img_back})

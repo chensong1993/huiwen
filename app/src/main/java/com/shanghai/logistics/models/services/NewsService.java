@@ -18,7 +18,7 @@ public interface NewsService {
     //注册
     @POST("userInfo/register.do")
     @FormUrlEncoded
-    Flowable<ApiResponse<LoginEntity>> register(@Field("phone") String phone, @Field("password") String password, @Field("code") String code, @Field("nickName") String nickName);
+    Flowable<ApiResponse<String>> register(@Field("phone") String phone, @Field("password") String password, @Field("code") String code, @Field("nickName") String nickName);
 
     //获取验证码
     @POST("SMSCode/sendCode.do")

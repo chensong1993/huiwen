@@ -3,11 +3,14 @@ package com.shanghai.logistics.presenters.login;
 import com.shanghai.logistics.base.RxPresenter;
 import com.shanghai.logistics.base.connectors.login.RegisterConnector;
 import com.shanghai.logistics.models.DataManager;
+import com.shanghai.logistics.models.entity.ApiResponse;
 import com.shanghai.logistics.models.entity.LoginEntity;
 import com.shanghai.logistics.util.RxUtils;
 import com.shanghai.logistics.widget.CommonSubscriber;
 
 import javax.inject.Inject;
+
+import io.reactivex.functions.Consumer;
 
 /**
  * @author chensong
@@ -30,37 +33,36 @@ public class RegisterPresenter extends RxPresenter<RegisterConnector.View> imple
     public void getSendCode(String phone, int type) {
         addSubscribe(mDataManager.getSendCode(phone, type)
                 .compose(RxUtils.rxSchedulerHelper())
-                .compose(RxUtils.handleResults())
-                .subscribeWith(new CommonSubscriber<String>(mView) {
-                    @Override
-                    public void onNext(String s) {
-                        mView.sendCodeData();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        mView.sendCodeDataErr(e.getMessage());
-                    }
-                }));
+                .subscribe(new Consumer<ApiResponse<String>>() {
+                               @Override
+                               public void accept(ApiResponse<String> response) {
+                                   mView.sendCode(response.getMsg());
+                               }
+                           }, new Consumer<Throwable>() {
+                               @Override
+                               public void accept(Throwable throwable) throws Exception {
+                                   mView.sendCodeErr(throwable.getMessage());
+                               }
+                           }
+                ));
     }
 
     @Override
     public void getRegisterData(String phone, String password, String code, String nickName) {
         addSubscribe(mDataManager.getRegister(phone, password, code, nickName)
                 .compose(RxUtils.rxSchedulerHelper())
-                .compose(RxUtils.handleResults())
-                .subscribeWith(new CommonSubscriber<LoginEntity>(mView) {
+                .subscribe(new Consumer<ApiResponse<String>>() {
                     @Override
-                    public void onNext(LoginEntity registerEntity) {
-                        mView.registerUserData(registerEntity);
+                    public void accept(ApiResponse<String> Response) {
+                        mView.registerMsg(Response.getMsg());
                     }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        mView.registerErr(throwable.getMessage());
+                    }
+                })
 
-                    @Override
-                    public void onError(Throwable e) {
-                        super.onError(e);
-                        mView.registerErr(e.getMessage());
-                    }
-                }));
+        );
     }
 }

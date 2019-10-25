@@ -1,10 +1,12 @@
 package com.shanghai.logistics.models.entity;
 
+import android.os.Parcelable;
+
 /**
  * @author chensong
  * @date 2019/4/17 11:27
  */
-public class LoginEntity {
+public class LoginEntity  {
     private String createTime;
 
     private int driverServicePoint;

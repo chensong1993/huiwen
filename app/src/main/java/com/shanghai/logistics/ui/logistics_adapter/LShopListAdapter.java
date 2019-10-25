@@ -24,7 +24,7 @@ public class LShopListAdapter extends BaseQuickAdapter<UserShopEntity.DedicatedL
     protected void convert(BaseViewHolder helper, UserShopEntity.DedicatedLine item) {
         helper.setText(R.id.tv_city_zhuanxian, item.getLineName());
         helper.setText(R.id.tv_city, item.getServiceAddress());
-        helper.setText(R.id.tv_time, item.getAging() + "小时"); //时间
+        helper.setText(R.id.tv_time, item.getAging() + "天"); //时间
         helper.setText(R.id.tv_wight, item.getWeight() + "/吨");
         helper.setText(R.id.tv_square, item.getVolume() + "/方");
        // helper.setText(R.id.tv_sales_volume, "月销" + item.getTotalSales() + "笔");

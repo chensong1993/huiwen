@@ -14,7 +14,8 @@
         android:padding="10dp">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/ll_kaidan"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
@@ -35,7 +36,7 @@
 
         <LinearLayout
             android:id="@+id/ll_scan"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
@@ -56,7 +57,7 @@
 
         <LinearLayout
             android:id="@+id/ll_myQRCodes"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
@@ -83,7 +84,7 @@
 
         <LinearLayout
             android:id="@+id/ll_billing"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
@@ -105,7 +106,7 @@
 
         <LinearLayout
             android:id="@+id/ll_waybill"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
@@ -127,7 +128,7 @@
 
         <LinearLayout
             android:id="@+id/ll_start_recording"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
@@ -149,7 +150,7 @@
 
         <LinearLayout
             android:id="@+id/ll_astern_record"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"

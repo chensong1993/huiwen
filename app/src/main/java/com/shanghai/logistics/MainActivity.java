@@ -1,18 +1,33 @@
 package com.shanghai.logistics;
 
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.gyf.immersionbar.ImmersionBar;
+import com.shanghai.logistics.app.Constants;
 import com.shanghai.logistics.base.SimpleActivity;
 import com.shanghai.logistics.ui.adapter.main.MainViewPagerAdapter;
+import com.shanghai.logistics.util.DestroyActivityUtil;
+import com.shanghai.logistics.util.FormatUtil;
 import com.shanghai.logistics.widget.navigation.BottomNavigation;
 import com.shanghai.logistics.widget.navigation.BottomNavigationAdapter;
 import com.shanghai.logistics.widget.navigation.BottomNavigationViewPager;
 
+import java.lang.reflect.Field;
+import java.util.Calendar;
+import java.util.List;
+
 import butterknife.BindView;
+
 public class MainActivity extends SimpleActivity {
 
     @BindView(R.id.view_pager)
@@ -22,7 +37,7 @@ public class MainActivity extends SimpleActivity {
     @BindView(R.id.ll_dow)
     LinearLayout mLinearLayout;
     long mBackTime;
-
+    Bundle bundle;
     private MainViewPagerAdapter adapter;
 
     @Override
@@ -33,6 +48,10 @@ public class MainActivity extends SimpleActivity {
 
     @Override
     protected void initEventAndData() {
+        Log.i(TAG, "initEventAndData: " + FormatUtil.notHasLightSensorManager(this));
+        //将activity 添加 以便在特定节点关闭
+        DestroyActivityUtil.addDestoryActivityToMap(this, "MainActivity");
+        bundle = getIntent().getBundleExtra(Constants.LOGIN_USER_INFO);
         setSwipeBackEnable(false);
         ImmersionBar.with(this)
                 .fitsSystemWindows(true)
@@ -56,7 +75,15 @@ public class MainActivity extends SimpleActivity {
         });
 
         viewPager.setOffscreenPageLimit(4);
-        adapter = new MainViewPagerAdapter(getSupportFragmentManager());
+        if (bundle != null) {
+            Log.i("initEventAndData", "initEventAndData: " + bundle.getString(Constants.PHONE));
+        }
+        if (bundle != null) {
+            adapter = new MainViewPagerAdapter(getSupportFragmentManager(), bundle);
+        } else {
+            adapter = new MainViewPagerAdapter(getSupportFragmentManager());
+        }
+
         viewPager.setAdapter(adapter);
 
 //        RongIM.connect("ERiTVYwEQtpLMT+dbGyzm25uo30QF7fp2oUreNq+FRFCdsAjN2kYqQmorwW02yWl432BFjcxmMfpSWGdrZheBl5ioJh9BxROTTN2DBgnKdtO/m3NLMHL2c3MV7z835JMck+FEjL6ZUw=", new RongIMClient.ConnectCallback() {
@@ -88,6 +115,16 @@ public class MainActivity extends SimpleActivity {
 //                Log.e("homeFragment", "用户模块融云连接失败");
 //            }
 //        });
+
+//        //大部分Android5.0的手机不支持此方法，Android5.1之后全面支持
+//        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+//            try {
+//                startActivity(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS));
+//            } catch (Exception e) {
+//                Toast.makeText(this, "无法开启允许查看使用情况的应用界面", Toast.LENGTH_LONG).show();
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     @Override
@@ -109,4 +146,5 @@ public class MainActivity extends SimpleActivity {
         super.onDestroy();
         //   App.refWatcher.watch(this);
     }
+
 }

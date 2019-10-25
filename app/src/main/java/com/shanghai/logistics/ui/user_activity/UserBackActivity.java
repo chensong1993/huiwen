@@ -15,7 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.hjq.toast.ToastUtils;
 import com.shanghai.logistics.R;
+import com.shanghai.logistics.app.App;
 import com.shanghai.logistics.app.Constants;
 import com.shanghai.logistics.base.BaseActivity;
 import com.shanghai.logistics.base.SimpleActivity;
@@ -45,7 +47,7 @@ public class UserBackActivity extends BaseActivity<UserBrandLogisticsPresenter> 
     EditText mEtBrand;
     UserBrandLineAdapter mUserBrandLineAdapter;
     List<BrandLineEntity> mBrandLineList;
-
+    String Address;
 
     @Override
     protected int getLayout() {
@@ -55,7 +57,12 @@ public class UserBackActivity extends BaseActivity<UserBrandLogisticsPresenter> 
     @Override
     protected void initEventAndData() {
         mTvTitle.setText("今日推荐");
-        mPresenter.getBrandLogistics("上海", 1);
+        if (App.kv.decodeString(Constants.ADDRESS) == null) {
+            Address = "上海";
+        } else {
+            Address = App.kv.decodeString(Constants.ADDRESS);
+        }
+        mPresenter.getBrandLogistics(Address, 1);
         mBrandLineList = new ArrayList<>();
         mUserBrandLineAdapter = new UserBrandLineAdapter(mBrandLineList);
         mRvBrandLine.setLayoutManager(new GridLayoutManager(this, 2));
@@ -83,6 +90,12 @@ public class UserBackActivity extends BaseActivity<UserBrandLogisticsPresenter> 
     @Override
     public void UserBrandLogisticsErr(String s) {
         Log.i(TAG, "UserBrandLineErr: " + s);
+        switch (s) {
+            case "0":
+                ToastUtils.show("暂无数据");
+                break;
+
+        }
     }
 
 

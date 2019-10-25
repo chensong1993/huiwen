@@ -4,6 +4,7 @@ import com.shanghai.logistics.base.RxPresenter;
 import com.shanghai.logistics.base.connectors.user.UserShopDetailConnector;
 import com.shanghai.logistics.base.connectors.user.UserSpecialConnector;
 import com.shanghai.logistics.models.DataManager;
+import com.shanghai.logistics.models.entity.logistics.LStoreInfoEntity;
 import com.shanghai.logistics.models.entity.user.SpecialEntity;
 import com.shanghai.logistics.models.entity.user.UserShopEntity;
 import com.shanghai.logistics.util.RxUtils;
@@ -49,6 +50,25 @@ public class UserSpecialPresenter extends RxPresenter<UserSpecialConnector.View>
                     public void onError(Throwable e) {
                         super.onError(e);
                         mView.UserSpecialErr(e.getMessage());
+                    }
+                }));
+    }
+
+    @Override
+    public void getLogisticsSpecial(String storeId, int type) {
+        addSubscribe(dataManager.getLStoreInfo(storeId,type)
+                .compose(RxUtils.rxSchedulerHelper())
+                .compose(RxUtils.handleResults())
+                .subscribeWith(new CommonSubscriber<LStoreInfoEntity>(mView) {
+                    @Override
+                    public void onNext(LStoreInfoEntity entities) {
+                        mView.LogisticsStoreInfo(entities);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        super.onError(e);
+                        mView.LogisticsStoreInfoErr(e.getMessage());
                     }
                 }));
     }

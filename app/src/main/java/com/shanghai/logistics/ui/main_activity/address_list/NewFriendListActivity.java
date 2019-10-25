@@ -50,7 +50,7 @@ public class NewFriendListActivity extends BaseActivity<MainNewFriendPresenter> 
     @Override
     protected void initEventAndData() {
         mTvTitle.setText("新朋友");
-        mPresenter.getMainNewFriend("15169169195");
+        mPresenter.getMainNewFriend(mLoginPhone);
         mNewFriendEntityList=new ArrayList<>();
         mainNewFriendsAdapter=new MainNewFriendsAdapter(mNewFriendEntityList);
         mRvMyFriends.setAdapter(mainNewFriendsAdapter);

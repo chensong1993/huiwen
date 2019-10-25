@@ -10,7 +10,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.hjq.toast.ToastUtils;
 import com.shanghai.logistics.R;
+import com.shanghai.logistics.app.App;
+import com.shanghai.logistics.app.Constants;
 import com.shanghai.logistics.base.BaseActivity;
 import com.shanghai.logistics.base.SimpleActivity;
 import com.shanghai.logistics.base.connectors.user.UserBrandLineConnector;
@@ -34,6 +38,7 @@ public class SpecialLineActivity extends BaseActivity<UserBrandLinePresenter> im
     RecyclerView mRvBrandLine;
     List<HomeListEntity> mBrandLineList;
     UserHomeListAdapter mUserHomeListAdapter;
+    String Address;
 
     @Override
     protected int getLayout() {
@@ -43,12 +48,28 @@ public class SpecialLineActivity extends BaseActivity<UserBrandLinePresenter> im
     @Override
     protected void initEventAndData() {
         mTvTitle.setText("今日推荐");
-        mPresenter.getBrandLine("上海", 1);
+        if (App.kv.decodeString(Constants.ADDRESS) == null) {
+            Address = "上海";
+        } else {
+            Address = App.kv.decodeString(Constants.ADDRESS);
+        }
+
+        mPresenter.getBrandLine(Address, 1);
         mBrandLineList = new ArrayList<>();
         mUserHomeListAdapter = new UserHomeListAdapter(mBrandLineList);
         mRvBrandLine.setLayoutManager(new GridLayoutManager(this, 2));
         mRvBrandLine.setAdapter(mUserHomeListAdapter);
-
+        mUserHomeListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent(SpecialLineActivity.this, HomeDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt(Constants.STORE_ID, mUserHomeListAdapter.getData().get(position).getId());
+                bundle.putInt(Constants.ACTIVITY_TYPE, Constants.USER_HOME_FRAGMENT);
+                intent.putExtra(Constants.ACTIVITY_TYPE, bundle);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -58,7 +79,13 @@ public class SpecialLineActivity extends BaseActivity<UserBrandLinePresenter> im
 
     @Override
     public void UserBrandLineErr(String s) {
-      //  Log.i(TAG, "UserBrandLineErr: " + s);
+        switch (s) {
+            case "0":
+                ToastUtils.show("暂无数据");
+                break;
+
+        }
+        //  Log.i(TAG, "UserBrandLineErr: " + s);
     }
 
     @OnClick({R.id.img_back})

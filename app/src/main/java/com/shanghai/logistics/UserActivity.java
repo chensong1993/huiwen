@@ -73,10 +73,12 @@ public class UserActivity extends SimpleActivity {
 
     @Override
     protected void initEventAndData() {
-        boolean b = hasPermission(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (!b) {
-            requestPermission(Constants.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
-        }
+//        boolean b = hasPermission(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
+//        if (!b) {
+//            requestPermission(Constants.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
+//        }
+
+
         //将activity 添加 以便在特定节点关闭
         DestroyActivityUtil.addDestoryActivityToMap(this, "UserActivity");
         //判断当前是否用户类型

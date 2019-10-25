@@ -89,13 +89,13 @@
         android:layout_height="1dp"
         android:background="@color/hui" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp"
-        android:text="切换账户"
-        android:textColor="@color/black" />
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:paddingLeft="10dp"-->
+        <!--android:text="切换账户"-->
+        <!--android:textColor="@color/black" />-->
 
     <TextView
         android:layout_width="match_parent"
@@ -103,6 +103,7 @@
         android:background="@color/hui" />
 
     <TextView
+        android:id="@+id/tv_login_out"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center_vertical"

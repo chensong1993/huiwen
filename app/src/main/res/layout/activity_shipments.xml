@@ -41,7 +41,7 @@
 
         <com.flyco.tablayout.SlidingTabLayout
             android:id="@+id/st_tab"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_gravity="center"
             android:background="@color/white"
@@ -61,8 +61,7 @@
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="60dp">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -92,7 +91,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="@drawable/null_drawable"
-                        android:hint="请填写地址"
+                        android:hint="出发地"
                         android:textSize="14dp" />
 
                 </LinearLayout>
@@ -115,7 +114,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="@drawable/null_drawable"
-                        android:text="上海浦东新区"
+                        android:hint="到达地"
                         android:textColor="@color/black"
                         android:textSize="14dp" />
 
@@ -124,37 +123,47 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:text="装货:"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="2"
+                        android:text="货物:"
                         android:textColor="@color/black" />
 
                     <EditText
                         android:id="@+id/et_goods"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/item_stroke_black" />
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:layout_weight="4"
+                        android:background="@drawable/item_stroke_black"
+                        android:padding="5dp"
+                        android:textSize="16dp" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="2"
                         android:text="体积:"
                         android:textColor="@color/black" />
 
                     <EditText
                         android:id="@+id/et_volume"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/item_stroke_black" />
+                        android:layout_weight="4"
+                        android:background="@drawable/item_stroke_black"
+                        android:inputType="number"
+                        android:padding="5dp"
+                        android:text=""
+                        android:textSize="16dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -164,33 +173,41 @@
                     android:padding="10dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="2"
                         android:text="重量:"
                         android:textColor="@color/black" />
 
                     <EditText
                         android:id="@+id/et_weight"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:background="@drawable/item_stroke_black" />
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:layout_weight="4"
+                        android:background="@drawable/item_stroke_black"
+                        android:inputType="number"
+                        android:padding="5dp"
+                        android:textSize="16dp" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="2"
                         android:text="件数:"
                         android:textColor="@color/black" />
 
                     <EditText
                         android:id="@+id/et_pieces"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/item_stroke_black" />
+                        android:layout_weight="4"
+                        android:background="@drawable/item_stroke_black"
+                        android:inputType="number"
+                        android:padding="5dp"
+                        android:textSize="16dp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -270,7 +287,7 @@
                         android:textColor="@color/black" />
 
                     <TextView
-                        android:id="@+id/tv_loadMethod"
+                        android:id="@+id/tv_handling_type"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="选择装卸方式＞"
@@ -296,11 +313,87 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/item_stroke_black"
                         android:hint="请输入数量"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
+                        android:inputType="number"
+                        android:padding="5dp"
                         android:textColor="@color/red"
                         android:textSize="14dp" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="费用预估：" />
+
+
+                    <EditText
+                        android:id="@+id/et_estimatedCost"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/item_stroke_black"
+                        android:gravity="center"
+                        android:hint="预估价格"
+                        android:inputType="numberDecimal"
+                        android:padding="5dp"
+                        android:textColor="@color/black"
+                        android:textSize="14dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="30dp"
+                        android:gravity="center"
+                        android:text="是否指定联系人"
+                        android:textColor="@color/black" />
+
+                    <RadioGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rb_is"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:checked="true"
+                            android:gravity="center|left"
+                            android:text="是"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@+id/rb_no"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center|left"
+                            android:text="否"
+                            android:textSize="14sp" />
+                    </RadioGroup>
+                </LinearLayout>
+
+                <EditText
+                    android:id="@+id/et_driver"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="请输入指定联系人电话"
+                    android:maxLength="11"
+                    android:padding="@dimen/dp_10"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -320,28 +413,30 @@
                         android:layout_height="120dp"
                         android:layout_weight="1"
                         android:background="@drawable/item_stroke_black"
+                        android:gravity="top"
                         android:hint="请输入内容"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:textColor="@color/red"
                         android:textSize="14dp" />
                 </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_confirm"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="1"
+                    android:background="@color/red"
+                    android:gravity="center"
+                    android:text="确认叫车"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
     </LinearLayout>
-
-
-    <TextView
-        android:id="@+id/tv_confirm"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_weight="1"
-        android:background="@color/red"
-        android:gravity="center"
-        android:text="确认叫车"
-        android:textColor="@color/white"
-        android:textSize="16dp" />
 
 
 </RelativeLayout>

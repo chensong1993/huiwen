@@ -48,7 +48,7 @@ public class LoginPresenter extends RxPresenter<LoginConnector.View> implements 
                     @Override
                     public void onError(Throwable e) {
                         super.onError(e);
-                        mView.stateError();
+                        mView.LoginErr(e.getMessage());
                       //  RxBus.getDefault().post(new LoginEvent(false, null));
                     }
                 }));

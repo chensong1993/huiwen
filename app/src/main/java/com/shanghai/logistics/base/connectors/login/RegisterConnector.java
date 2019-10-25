@@ -13,13 +13,13 @@ public interface RegisterConnector {
         /**
          * 注册信息
          */
-        void registerUserData(LoginEntity loginEntity);
+        void registerMsg(int msg);
 
-        void sendCodeData();
+        void registerErr(String s);
 
-        void registerErr(String msg);
+        void sendCode(int msg);
 
-        void sendCodeDataErr(String msg);
+        void sendCodeErr(String s);
     }
 
     interface Presenter extends BasePresenter<View> {

@@ -1,7 +1,9 @@
 package com.shanghai.logistics.models.http;
 
+import com.shanghai.logistics.models.entity.ApiDataResponse;
 import com.shanghai.logistics.models.entity.ApiResponse;
 import com.shanghai.logistics.models.entity.LoginEntity;
+import com.shanghai.logistics.models.entity.logistics.LEnterpriseInfo;
 import com.shanghai.logistics.models.entity.logistics.LOrderEntity;
 import com.shanghai.logistics.models.entity.logistics.LStoreInfoEntity;
 import com.shanghai.logistics.models.entity.logistics.LUserInfoEntity;
@@ -9,10 +11,12 @@ import com.shanghai.logistics.models.entity.main.FriendEntity;
 import com.shanghai.logistics.models.entity.main.NewFriendEntity;
 import com.shanghai.logistics.models.entity.user.AddressListEntity;
 import com.shanghai.logistics.models.entity.user.BrandLineEntity;
+import com.shanghai.logistics.models.entity.user.CarLengthEntity;
 import com.shanghai.logistics.models.entity.user.CarModelEntity;
 import com.shanghai.logistics.models.entity.user.CommentEntity;
 import com.shanghai.logistics.models.entity.user.HomeListEntity;
 import com.shanghai.logistics.models.entity.user.LinePhoneEntity;
+import com.shanghai.logistics.models.entity.user.PersonalCertification;
 import com.shanghai.logistics.models.entity.user.SpecialEntity;
 import com.shanghai.logistics.models.entity.user.UserInfoEntity;
 import com.shanghai.logistics.models.entity.user.UserShopEntity;
@@ -34,7 +38,7 @@ public interface HttpHelper {
 
     Flowable<ApiResponse<LoginEntity>> getLogin(String phone, String password);
 
-    Flowable<ApiResponse<LoginEntity>> getRegister(String phone, String password, String code, String nickName);
+    Flowable<ApiResponse<String>> getRegister(String phone, String password, String code, String nickName);
 
     Flowable<ApiResponse<String>> getSendCode(String phone, int type);
 
@@ -64,8 +68,9 @@ public interface HttpHelper {
 
     Flowable<ApiResponse<UserInfoEntity>> getUserInfo(String phone);
 
-    Flowable<ApiResponse<List<CarModelEntity>>> getCarModel();
+    Flowable<ApiDataResponse<List<CarModelEntity>>> getCarModel();
 
+    Flowable<ApiDataResponse<List<CarLengthEntity>>> getCarLength();
   //  Flowable<ApiResponse<Integer>> getSendOrder(Map<String, RequestBody> sendOrder);
 
     Flowable<ApiResponse<List<FriendEntity>>> getMainFriends( String phone);
@@ -79,5 +84,9 @@ public interface HttpHelper {
     Flowable<ApiResponse<LStoreInfoEntity>> getLStoreInfo(String storeId,int type);
 
     Flowable<ApiResponse<LOrderEntity>> orderInfoDetail(String orderNo);
+
+    Flowable<ApiResponse<PersonalCertification>> userPersonalCertification(String phone);
+
+    Flowable<ApiResponse<LEnterpriseInfo>> enterpriseInfo(String phone);
 
 }

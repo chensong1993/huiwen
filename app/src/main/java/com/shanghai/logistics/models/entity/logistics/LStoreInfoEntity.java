@@ -144,6 +144,16 @@ public class LStoreInfoEntity {
 
         private int weight;
 
+        private int totalSales;
+
+        public int getTotalSales() {
+            return totalSales;
+        }
+
+        public void setTotalSales(int totalSales) {
+            this.totalSales = totalSales;
+        }
+
         public void setAging(String aging) {
             this.aging = aging;
         }

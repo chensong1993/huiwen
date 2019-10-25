@@ -58,7 +58,7 @@ public class AddressListActivity extends BaseActivity<UserAddressPresenter> impl
 
     @Override
     protected void initEventAndData() {
-        mPresenter.getUserAddress("15169169195");
+        mPresenter.getUserAddress(mLoginPhone);
         mTvRightText.setVisibility(View.VISIBLE);
         mTvRightText.setText("添加地址");
         mAddressList = new ArrayList<>();

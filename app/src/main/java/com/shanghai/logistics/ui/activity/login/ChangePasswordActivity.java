@@ -1,5 +1,6 @@
 package com.shanghai.logistics.ui.activity.login;
 
+import android.text.InputType;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -15,6 +16,7 @@ import com.shanghai.logistics.base.connectors.login.ChangePwdConnector;
 import com.shanghai.logistics.base.connectors.login.RegisterConnector;
 import com.shanghai.logistics.presenters.login.ChangePwdPresenter;
 import com.shanghai.logistics.presenters.login.RegisterPresenter;
+import com.shanghai.logistics.util.CountDownTimerUtils;
 import com.shanghai.logistics.util.FormatUtil;
 
 import butterknife.BindView;
@@ -39,6 +41,8 @@ public class ChangePasswordActivity extends BaseActivity<ChangePwdPresenter> imp
     @BindView(R.id.img_back)
     ImageView mImgBack;
     String phone, code, newPwd;
+    //倒计时
+    CountDownTimerUtils countDownTimerUtils;
 
     @Override
     protected int getLayout() {
@@ -52,33 +56,66 @@ public class ChangePasswordActivity extends BaseActivity<ChangePwdPresenter> imp
     }
 
     @Override
-    public void changePwd() {
-        ToastUtils.show("修改成功");
+    public void changePwd(int msg) {
+        switch (msg) {
+            case 1:
+                ToastUtils.show("修改成功");
+                finish();
+                break;
+            case -1:
+                ToastUtils.show("还有哪项没填哦");
+                break;
+            case -2:
+                ToastUtils.show("验证码错误");
+                break;
+            case -3:
+                ToastUtils.show("验证码已失效");
+                break;
+            case -4:
+                ToastUtils.show("该手机号未注册");
+                break;
+            default:
+                ToastUtils.show("获取验证码失败");
+                break;
+        }
     }
 
     @Override
-    public void sendCodeData() {
-        ToastUtils.show("验证码获取成功");
-    }
-
-    @Override
-    public void sendCodeErr(String msg) {
-        int msgs = Integer.parseInt(msg);
-        switch (msgs) {
-
+    public void sendCodeData(int msg) {
+        switch (msg) {
+            case 0:
+                ToastUtils.show("发送失败");
+                break;
+            case 1:
+                countDownTimerUtils = new CountDownTimerUtils(this, mTvHCode, 60000, 1000);
+                countDownTimerUtils.start();
+                ToastUtils.show("发送成功");
+                break;
+            case -1:
+                ToastUtils.show("看看还有哪项没填");
+                break;
             case -2:
                 ToastUtils.show("该手机号已经注册过");
                 break;
             case -3:
                 ToastUtils.show("该手机号未注册过");
                 break;
+            case -4:
+                ToastUtils.show("手机号不正确");
+                break;
             case -5:
-                ToastUtils.show("操作太频繁，发送频率超过限制，稍后重试");
+                ToastUtils.show("您的操作太频繁，请稍候再试");
                 break;
             default:
-                ToastUtils.show("获取验证码失败");
+                ToastUtils.show("获取验证码错误");
                 break;
         }
+
+    }
+
+    @Override
+    public void sendCodeErr(String msg) {
+        ToastUtils.show("验证码获取失败 " + msg);
 
     }
 
@@ -87,11 +124,19 @@ public class ChangePasswordActivity extends BaseActivity<ChangePwdPresenter> imp
         ToastUtils.show("修改失败");
     }
 
-    @OnClick({R.id.img_back, R.id.tv_change_pwd, R.id.tv_h_code})
+    @OnClick({R.id.see_check,R.id.img_back, R.id.tv_change_pwd, R.id.tv_h_code})
     void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_back:
+                    finish();
+                break;
+            case R.id.see_check:
+                if(mCheck.isChecked()){
+                    mEtNewPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                } else {
+                    mEtNewPwd.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 
+                }
                 break;
             case R.id.tv_h_code:
                 phone = mEtPhone.getText().toString();

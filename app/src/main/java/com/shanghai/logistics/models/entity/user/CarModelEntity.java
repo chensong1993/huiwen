@@ -31,4 +31,12 @@ public class CarModelEntity {
         return this.id;
     }
 
+    @Override
+    public String toString() {
+        return "CarModelEntity{" +
+                "carImg='" + carImg + '\'' +
+                ", carModel='" + carModel + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }

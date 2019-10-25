@@ -12,6 +12,7 @@ public interface LoginConnector {
 
     interface View extends BaseView {
         void showLogin(LoginEntity entities);
+        void LoginErr(String err);
     }
 
     interface Presenter extends BasePresenter<View> {

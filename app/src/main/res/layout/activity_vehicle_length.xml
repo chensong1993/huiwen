@@ -2,42 +2,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <include layout="@layout/item_red_title" />
 
-    <LinearLayout
-        android:id="@+id/ll_vehicle"
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_car_model"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:background="@color/red"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:layout_marginTop="50dp" />
 
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@color/hui" />
-
-        <TextView
-            android:id="@+id/tv_vehicle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="大货车" />
-
-    </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ll_v_length"
+        android:id="@+id/ll_car_length"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:orientation="vertical"
-        android:padding="10dp"
         android:visibility="gone">
 
         <TextView
@@ -46,61 +29,16 @@
             android:text="车长:最多选三个"
             android:textColor="@color/black" />
 
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_car_length"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:id="@+id/tv_length"
-                android:layout_width="80dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="5dp"
-                android:background="@color/hui"
-                android:button="@null"
-                android:gravity="center"
-                android:text="1.8"
-                android:textSize="14sp" />
-
-            <CheckBox
-                android:id="@+id/tv_length2"
-                android:layout_width="80dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="5dp"
-                android:background="@color/hui"
-                android:button="@null"
-                android:gravity="center"
-                android:text="1.2"
-                android:textSize="14sp" />
-
-            <CheckBox
-                android:id="@+id/tv_length3"
-                android:layout_width="80dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="5dp"
-                android:background="@color/hui"
-                android:button="@null"
-                android:gravity="center"
-                android:text="1.3"
-                android:textSize="14sp" />
-
-            <CheckBox
-                android:id="@+id/tv_length4"
-                android:layout_width="80dp"
-                android:layout_height="20dp"
-                android:layout_marginLeft="5dp"
-                android:background="@color/hui"
-                android:button="@null"
-                android:gravity="center"
-                android:text="1.4"
-                android:textSize="14sp" />
-        </LinearLayout>
+            android:layout_height="wrap_content" />
 
         <EditText
             android:id="@+id/et_length"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="@drawable/null_drawable"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
             android:hint="请输入你想要的车长"
             android:textSize="12dp" />
     </LinearLayout>

@@ -39,12 +39,16 @@ import com.shanghai.logistics.base.SimpleActivity;
 import com.shanghai.logistics.base.connectors.logistics.LogisticsOrderDetailConnector;
 import com.shanghai.logistics.models.entity.ApiResponse;
 import com.shanghai.logistics.models.entity.logistics.LOrderEntity;
+import com.shanghai.logistics.models.entity.rxbus.BillingEvent;
+import com.shanghai.logistics.models.http.Uploading;
 import com.shanghai.logistics.models.services.ApiService;
 import com.shanghai.logistics.models.services.LogisticsService;
 import com.shanghai.logistics.models.services.UserService;
 import com.shanghai.logistics.presenters.logistics.LogisticsOrderDetailPresenter;
 import com.shanghai.logistics.util.DataUtil;
 import com.shanghai.logistics.util.FileUploadUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -135,7 +139,7 @@ public class PlaceAnOrderActivity extends BaseActivity<LogisticsOrderDetailPrese
     int startType, endType;
     int activityType;
     int storeId;
-    int  dedicatedLine;
+    int dedicatedLine;
     String storeAccount;
 
     @Override
@@ -143,10 +147,91 @@ public class PlaceAnOrderActivity extends BaseActivity<LogisticsOrderDetailPrese
         return R.layout.activity_place_an_order;
     }
 
-    @OnClick({R.id.tv_submit, R.id.img_back, R.id.tv_merchant_address, R.id.tv_user_address, R.id.tv_date, R.id.tv_che_type, R.id.tv_pay_type})
+    @OnClick({R.id.rb_home, R.id.rb_end_home, R.id.rb_go, R.id.rb_end_go, R.id.tv_submit, R.id.img_back, R.id.tv_merchant_address, R.id.tv_user_address, R.id.tv_date, R.id.tv_che_type, R.id.tv_pay_type})
     void onClicks(View v) {
         switch (v.getId()) {
+//            case R.id.rb_go:
+//                if (mRbGo.isChecked()) {
+//                    startType = 1;
+//                }
+//                break;
+//            case R.id.rb_end_go:
+//                if (mRbEndGo.isChecked()) {
+//                    startType = 2;
+//                }
+//                break;
+//            case R.id.rb_home:
+//                if (mRbHome.isChecked()) {
+//                    endType = 1;
+//                }
+//                break;
+//            case R.id.rb_end_home:
+//                if (mRbEndHome.isChecked()) {
+//                    endType = 2;
+//                }
+//                break;
             case R.id.tv_submit:
+                if (mEtName.getText().toString().isEmpty()) {
+                    ToastUtils.show("姓名不能为空");
+                    return;
+                }
+                if (mEtPhone.getText().toString().isEmpty()) {
+                    ToastUtils.show("手机号不能为空");
+                    return;
+                }
+                if (mEtAddress.getText().toString().isEmpty()) {
+                    ToastUtils.show("发货地址不能为空");
+                    return;
+                }
+                if (mEtEndName.getText().toString().isEmpty()) {
+                    ToastUtils.show("收货人不能为空");
+                    return;
+                }
+                if (mEtEndPhone.getText().toString().isEmpty()) {
+                    ToastUtils.show("收货人手机号不能为空");
+                    return;
+                }
+                if (mEtEndAddress.getText().toString().isEmpty()) {
+                    ToastUtils.show("收货人地址不能为空");
+                    return;
+                }
+                if (mEtGoods.getText().toString().isEmpty()) {
+                    ToastUtils.show("货物不能为空");
+                    return;
+                }
+                if (mEtVolume.getText().toString().isEmpty()) {
+                    ToastUtils.show("体积不能为空");
+                    return;
+                }
+                if (mEtWeight.getText().toString().isEmpty()) {
+                    ToastUtils.show("重量不能为空");
+                    return;
+                }
+                if (mEtPieces.getText().toString().isEmpty()) {
+                    ToastUtils.show("件数不能为空");
+                    return;
+                }
+                if (mTvDate.getText().toString().isEmpty()) {
+                    ToastUtils.show("装货时间不能为空");
+                    return;
+                }
+                if (mTvCheType.getText().toString().isEmpty()) {
+                    ToastUtils.show("车长车型不能为空");
+                    return;
+                }
+                if (mTvPayType.getText().toString().isEmpty()) {
+                    ToastUtils.show("支付方式不能为空");
+                    return;
+                }
+                if (mEtReceipt.getText().toString().isEmpty()) {
+                    ToastUtils.show("回单不能为空");
+                    return;
+                }
+                if (mEtEstimatedCost.getText().toString().isEmpty()) {
+                    ToastUtils.show("预估费用不能为空");
+                    return;
+                }
+                Log.i(TAG, "onClicks: ");
                 switch (activityType) {
                     case Constants.BILLING_ACTIVITY:
                         uploadInfo();
@@ -198,19 +283,9 @@ public class PlaceAnOrderActivity extends BaseActivity<LogisticsOrderDetailPrese
         }
     }
 
+
     @Override
     protected void initEventAndData() {
-        if (mRbGo.isChecked()) {
-            startType = 1;
-        } else {
-            startType = 2;
-        }
-
-        if (mRbEndGo.isChecked()) {
-            endType = 1;
-        } else {
-            endType = 2;
-        }
 
         Bundle bundle = getIntent().getBundleExtra(Constants.ACTIVITY_TYPE);
         if (bundle != null) {
@@ -285,7 +360,7 @@ public class PlaceAnOrderActivity extends BaseActivity<LogisticsOrderDetailPrese
         mEtEndAddress.setText(e.getEndAddress());
         mTvCheType.setText(e.getCarModel());
         mTvPayType.setText(e.getPayType());
-        mEtReceipt.setText("");
+        mEtReceipt.setText(e.getReceipt());
         mEtEstimatedCost.setText(e.getEstimatedCost() + "");
         mEtRemarks.setText(e.getRemark());
     }
@@ -326,35 +401,84 @@ public class PlaceAnOrderActivity extends BaseActivity<LogisticsOrderDetailPrese
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    @SuppressLint("CheckResult")
-    private void uploadInfo() {
-        Map<String, RequestBody> map = new HashMap<>();
-        map.put("orderNo", FileUploadUtil.requestBody(mTvOrderNum.getText().toString()));
-        map.put("startDeliveryType", FileUploadUtil.requestBody(startType + ""));
-        map.put("startUserName", FileUploadUtil.requestBody(mEtName.getText().toString()));
-        map.put("startPhone", FileUploadUtil.requestBody(mEtPhone.getText().toString()));
-        map.put("startAddress", FileUploadUtil.requestBody(mEtAddress.getText().toString()));
-        map.put("endDeliveryType", FileUploadUtil.requestBody(endType + ""));
-        map.put("endUserName", FileUploadUtil.requestBody(mEtEndName.getText().toString()));
-        map.put("endPhone", FileUploadUtil.requestBody(mEtEndPhone.getText().toString()));
-        map.put("endAddress", FileUploadUtil.requestBody(mEtEndAddress.getText().toString()));
-        map.put("goods", FileUploadUtil.requestBody(mEtGoods.getText().toString()));
-        map.put("volume", FileUploadUtil.requestBody(mEtVolume.getText().toString()));
-        map.put("weight", FileUploadUtil.requestBody(mEtWeight.getText().toString()));
-        map.put("pieces", FileUploadUtil.requestBody(mEtPieces.getText().toString()));
-        map.put("loadingTime", FileUploadUtil.requestBody(mTvDate.getText().toString()));
-        map.put("carModel", FileUploadUtil.requestBody(mTvCheType.getText().toString()));
-        map.put("payType", FileUploadUtil.requestBody(mTvPayType.getText().toString()));
-        map.put("receipt", FileUploadUtil.requestBody(mEtReceipt.getText().toString()));
-        // map.put("remark", FileUploadUtil.requestBody(mEtRemarks.getText().toString()));
-        map.put("estimatedCost", FileUploadUtil.requestBody(mEtEstimatedCost.getText().toString()));
 
-        ApiService.getInstance()
-                .create(LogisticsService.class, Constants.MAIN_URL)
-                .uploadOrderInfo(map)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new SingleObserver<ApiResponse<Integer>>() {
+    //物流端开单修改
+    private void uploadInfo() {
+        if (mRbGo.isChecked()) {
+            startType = 1;
+        } else {
+            startType = 2;
+        }
+
+        if (mRbEndGo.isChecked()) {
+            endType = 1;
+        } else {
+            endType = 2;
+        }
+
+        Uploading.LPlaceAnOrder(mTvOrderNum.getText().toString(), startType, mEtName.getText().toString(), mEtPhone.getText().toString(),
+                mEtAddress.getText().toString(), endType, mEtEndName.getText().toString(), mEtEndPhone.getText().toString(),
+                mEtEndAddress.getText().toString(), mEtGoods.getText().toString(), mEtVolume.getText().toString(), mEtWeight.getText().toString(),
+                mEtPieces.getText().toString(), mTvDate.getText().toString(), mTvCheType.getText().toString(), mTvPayType.getText().toString(),
+                mEtReceipt.getText().toString(), mEtEstimatedCost.getText().toString(), new SingleObserver<ApiResponse<Integer>>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(ApiResponse<Integer> integer) {
+                        switch (integer.getMsg()) {
+                            case 0:
+                                ToastUtils.show("上传失败");
+                                break;
+                            case 1:
+                                ToastUtils.show("上传成功");
+                             //   EventBus.getDefault().post(new BillingEvent(1));
+                                finish();
+                                break;
+                            case -1:
+                                ToastUtils.show("参数不能为空");
+                                break;
+                            default:
+                                ToastUtils.show("提交失败" + integer.getMsg());
+                                break;
+
+                        }
+                        Log.i(TAG, "onSuccess: " + integer.getMsg());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        //ToastUtils.show("提交失败" + e.getMessage());
+                        Log.i(TAG, "onError: " + e.getMessage());
+                    }
+                }
+        );
+    }
+
+
+    //用户端下单
+    private void UserUploadInfo() {
+        if (mRbGo.isChecked()) {
+            startType = 1;
+        } else {
+            startType = 2;
+        }
+
+        if (mRbEndGo.isChecked()) {
+            endType = 1;
+        } else {
+            endType = 2;
+        }
+
+        Uploading.UserPlaceAnOrder(mLoginPhone, mLoginPhone, storeId, 1, dedicatedLine, startType,
+                mEtName.getText().toString(), mEtPhone.getText().toString(), mEtAddress.getText().toString(),
+                endType, mEtEndName.getText().toString(), mEtEndPhone.getText().toString(), mEtEndAddress.getText().toString(),
+                mEtGoods.getText().toString(), mEtVolume.getText().toString(), mEtWeight.getText().toString(),
+                mEtPieces.getText().toString(), mTvDate.getText().toString(), mTvCheType.getText().toString(),
+                mTvPayType.getText().toString(), mEtReceipt.getText().toString(), mEtRemarks.getText().toString(),
+                mEtEstimatedCost.getText().toString(), 1, new SingleObserver<ApiResponse<Integer>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
@@ -373,71 +497,8 @@ public class PlaceAnOrderActivity extends BaseActivity<LogisticsOrderDetailPrese
                             case -1:
                                 ToastUtils.show("参数不能为空");
                                 break;
-
-                        }
-                        Log.i(TAG, "onSuccess: " + integer.getMsg());
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.i(TAG, "onError: ");
-                    }
-
-                });
-    }
-
-
-    //用户端下单
-    @SuppressLint("CheckResult")
-    private void UserUploadInfo() {
-        Map<String, RequestBody> map = new HashMap<>();
-        map.put("userAccount", FileUploadUtil.requestBody("15169169195"));
-        map.put("storeAccount", FileUploadUtil.requestBody("15169169195"));
-        map.put("storeId", FileUploadUtil.requestBody(storeId + ""));
-        map.put("userType", FileUploadUtil.requestBody(1 + ""));
-        map.put("dedicatedLine", FileUploadUtil.requestBody(dedicatedLine+""));
-        map.put("startDeliveryType", FileUploadUtil.requestBody(startType + ""));
-        map.put("startUserName", FileUploadUtil.requestBody(mEtName.getText().toString()));
-        map.put("startPhone", FileUploadUtil.requestBody(mEtPhone.getText().toString()));
-        map.put("startAddress", FileUploadUtil.requestBody(mEtAddress.getText().toString()));
-        map.put("endDeliveryType", FileUploadUtil.requestBody(endType + ""));
-        map.put("endUserName", FileUploadUtil.requestBody(mEtEndName.getText().toString()));
-        map.put("endPhone", FileUploadUtil.requestBody(mEtEndPhone.getText().toString()));
-        map.put("endAddress", FileUploadUtil.requestBody(mEtEndAddress.getText().toString()));
-        map.put("goods", FileUploadUtil.requestBody(mEtGoods.getText().toString()));
-        map.put("volume", FileUploadUtil.requestBody(mEtVolume.getText().toString()));
-        map.put("weight", FileUploadUtil.requestBody(mEtWeight.getText().toString()));
-        map.put("pieces", FileUploadUtil.requestBody(mEtPieces.getText().toString()));
-        map.put("loadingTime", FileUploadUtil.requestBody(mTvDate.getText().toString()));
-        map.put("carModel", FileUploadUtil.requestBody(mTvCheType.getText().toString()));
-        map.put("payType", FileUploadUtil.requestBody(mTvPayType.getText().toString()));
-        map.put("receipt", FileUploadUtil.requestBody(mEtReceipt.getText().toString()));
-         map.put("remark", FileUploadUtil.requestBody(mEtRemarks.getText().toString()));
-        map.put("estimatedCost", FileUploadUtil.requestBody(mEtEstimatedCost.getText().toString()));
-        map.put("type", FileUploadUtil.requestBody(1+""));
-
-        ApiService.getInstance()
-                .create(UserService.class, Constants.MAIN_URL)
-                .orderInfo(map)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new SingleObserver<ApiResponse<Integer>>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-                    @Override
-                    public void onSuccess(ApiResponse<Integer> integer) {
-                        switch (integer.getMsg()) {
-                            case 0:
-                                ToastUtils.show("上传失败");
-                                break;
-                            case 1:
-                                ToastUtils.show("上传成功1");
-                                finish();
-                                break;
-                            case -1:
-                                ToastUtils.show("参数不能为空");
+                            default:
+                                ToastUtils.show("提交失败" + integer.getMsg());
                                 break;
 
                         }
@@ -446,10 +507,11 @@ public class PlaceAnOrderActivity extends BaseActivity<LogisticsOrderDetailPrese
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.i(TAG, "onError: ");
+                          ToastUtils.show("提交失败" + e.getMessage());
+                        Log.i(TAG, "onError: " + e.getMessage());
                     }
-
                 });
+
     }
 
 

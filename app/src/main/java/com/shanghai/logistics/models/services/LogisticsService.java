@@ -1,6 +1,7 @@
 package com.shanghai.logistics.models.services;
 
 import com.shanghai.logistics.models.entity.ApiResponse;
+import com.shanghai.logistics.models.entity.logistics.LEnterpriseInfo;
 import com.shanghai.logistics.models.entity.logistics.LOrderEntity;
 import com.shanghai.logistics.models.entity.logistics.LStoreInfoEntity;
 import com.shanghai.logistics.models.entity.logistics.LUserInfoEntity;
@@ -21,18 +22,29 @@ import retrofit2.http.PartMap;
 public interface LogisticsService {
 
     /*
-    * 订单
-    * */
+     * 订单
+     * */
 
     //新订单
     @POST("orderInfo/selOrderInfoByStoreNewOrder.do")
     @FormUrlEncoded
-    Flowable<ApiResponse<List<LOrderEntity>>> orderInfo(@Field("storeAccount") String storeAccount,@Field("status") int status,@Field("pageNow") int pageNow);
+    Flowable<ApiResponse<List<LOrderEntity>>> orderInfo(@Field("storeAccount") String storeAccount, @Field("status") int status, @Field("pageNow") int pageNow);
 
     //企业认证接口
-    @POST("enterpriseCertification/updEnterpriseCertification.do")
+
+    @POST("enterpriseCertification/insEnterpriseCertification.do")
     @Multipart
     Single<ApiResponse<Integer>> enterpriseCertification(@PartMap Map<String, RequestBody> files);
+
+    //企业认证信息修改
+    @POST("enterpriseCertification/updEnterpriseCertification.do")
+    @Multipart
+    Single<ApiResponse<Integer>> upEnterpriseCertification(@PartMap Map<String, RequestBody> files);
+
+    //企业信息查询
+    @POST("enterpriseCertification/selEnterpriseCertificationByPhone.do")
+    @FormUrlEncoded
+    Flowable<ApiResponse<LEnterpriseInfo>> enterpriseInfo(@Field("phone") String phone);
 
     //物流中心个人信息
     @POST("userInfo/selUserInfoByStore.do")
@@ -84,4 +96,6 @@ public interface LogisticsService {
     @POST("store/insStore.do")
     @Multipart
     Single<ApiResponse<Integer>> AddStore(@PartMap Map<String, RequestBody> files);
+
+    //
 }

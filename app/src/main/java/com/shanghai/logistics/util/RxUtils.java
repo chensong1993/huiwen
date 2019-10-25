@@ -2,6 +2,8 @@ package com.shanghai.logistics.util;
 
 import android.util.Log;
 
+import com.hjq.toast.ToastUtils;
+import com.shanghai.logistics.models.entity.ApiDataResponse;
 import com.shanghai.logistics.models.entity.ApiResponse;
 
 import io.reactivex.BackpressureStrategy;
@@ -77,9 +79,30 @@ public class RxUtils {
                         if (tHttpResponse.getMsg() == 1) {
                             Log.i("apply", "apply: ");
                             return createData(tHttpResponse.getData());
+
                         } else {
                             return Flowable.error(new Exception(tHttpResponse.getMsg() + ""));
                         }
+                    }
+                });
+            }
+        };
+    }
+
+
+    /**
+     * 只有data数组
+     */
+    public static <T> FlowableTransformer<ApiDataResponse<T>, T> dataHandleResults() {   //compose判断结果
+        return new FlowableTransformer<ApiDataResponse<T>, T>() {
+            @Override
+            public Flowable<T> apply(Flowable<ApiDataResponse<T>> httpResponseFlowable) {
+                return httpResponseFlowable.flatMap(new Function<ApiDataResponse<T>, Flowable<T>>() {
+                    @Override
+                    public Flowable<T> apply(ApiDataResponse<T> tHttpResponse) {
+                        Log.i("apply", "apply: ");
+                        return createData(tHttpResponse.getData());
+
                     }
                 });
             }

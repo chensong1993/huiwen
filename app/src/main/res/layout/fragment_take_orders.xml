@@ -16,7 +16,7 @@
 
         <TextView
             android:id="@+id/tv_select_starting_point"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
@@ -24,7 +24,7 @@
 
         <TextView
             android:id="@+id/tv_select_destination"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"

@@ -1,14 +1,18 @@
 package com.shanghai.logistics.models.services;
 
+import com.shanghai.logistics.models.entity.ApiDataResponse;
 import com.shanghai.logistics.models.entity.ApiResponse;
+import com.shanghai.logistics.models.entity.logistics.LStoreInfoEntity;
 import com.shanghai.logistics.models.entity.main.FriendEntity;
 import com.shanghai.logistics.models.entity.main.NewFriendEntity;
 import com.shanghai.logistics.models.entity.user.AddressListEntity;
 import com.shanghai.logistics.models.entity.user.BrandLineEntity;
+import com.shanghai.logistics.models.entity.user.CarLengthEntity;
 import com.shanghai.logistics.models.entity.user.CarModelEntity;
 import com.shanghai.logistics.models.entity.user.CommentEntity;
 import com.shanghai.logistics.models.entity.user.HomeListEntity;
 import com.shanghai.logistics.models.entity.user.LinePhoneEntity;
+import com.shanghai.logistics.models.entity.user.PersonalCertification;
 import com.shanghai.logistics.models.entity.user.SpecialEntity;
 import com.shanghai.logistics.models.entity.user.UserInfoEntity;
 import com.shanghai.logistics.models.entity.user.UserShopEntity;
@@ -82,6 +86,11 @@ public interface UserService {
     @FormUrlEncoded
     Flowable<ApiResponse<SpecialEntity>> userSpecial(@Field("dedicatedLineId") int dedicatedLineId);
 
+    //查看店铺信息
+    @POST("store/selStoreInfo.do")
+    @FormUrlEncoded
+    Flowable<ApiResponse<LStoreInfoEntity>> lStoreInfo(@Field("storeId") String storeId, @Field("type") int type);
+
 
     //评论列表接口
     @POST("evaluation/selEvaluationByDedicatedLineId.do")
@@ -108,6 +117,17 @@ public interface UserService {
     @Multipart
     Single<ApiResponse<Integer>> userCertification(@PartMap Map<String, RequestBody> files);
 
+    //修改个人实名认证接口
+    @POST("personalCertification/updPersonalCertification.do")
+    @Multipart
+    Single<ApiResponse<Integer>> userUpCertification(@PartMap Map<String, RequestBody> files);
+
+    //个人认证接口查询
+    @POST("personalCertification/selPersonalCertificationByPhone.do")
+    @FormUrlEncoded
+    Flowable<ApiResponse<PersonalCertification>> userPersonalCertification(@Field("phone") String phone);
+
+
 
     //个人中心接口
     @POST("userInfo/selUserInfoByUser.do")
@@ -120,8 +140,11 @@ public interface UserService {
 
     //车型
     @POST("carModel/selCarModel.do")
-    @FormUrlEncoded
-    Flowable<ApiResponse<List<CarModelEntity>>> carModel();
+    Flowable<ApiDataResponse<List<CarModelEntity>>> carModel();
+
+    //车长
+    @POST("carLength/selCarLength.do")
+    Flowable<ApiDataResponse<List<CarLengthEntity>>> carLength();
 
     //派单接口
     @POST("sendOrder/insSendOrder.do")

@@ -1,13 +1,21 @@
 package com.shanghai.logistics.ui.activity;
 
 import android.Manifest;
+import android.annotation.TargetApi;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -59,6 +67,7 @@ import com.shanghai.logistics.base.SimpleActivity;
 import com.shanghai.logistics.ui.adapter.map.GaodeAdapter;
 import com.shanghai.logistics.ui.logistics_activity.AddStoresActivity;
 
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -95,7 +104,7 @@ public class GaodeActivity extends SimpleActivity implements AMapLocationListene
     private GeocodeSearch geocoderSearch;
 
     String AddressName;
-
+    Double longitude, latitude = 0.0;
     Intent intent;
     int type;
     GaodeAdapter gaodeAdapter;
@@ -103,6 +112,28 @@ public class GaodeActivity extends SimpleActivity implements AMapLocationListene
     InputtipsQuery inputquery;
     private UiSettings mUiSettings;//定义一个UiSettings对象
     AMap.InfoWindowAdapter mInfoWindowAdapter;
+
+    /**
+     * GPS权限
+     */
+    private int GPS_REQUEST_CODE = 10;
+    /**
+     * 需要进行检测的权限数组
+     */
+    protected String[] needPermissions = {
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+    };
+    /**
+     * 位置权限
+     */
+    private static final int PERMISSON_REQUESTCODE = 0;
+
+    /**
+     * 判断是否需要检测，防止不停的弹框
+     */
+    private boolean isNeedCheck = true;
+    private boolean isGPS = true;
 
     @Override
     protected int getLayout() {
@@ -119,7 +150,7 @@ public class GaodeActivity extends SimpleActivity implements AMapLocationListene
             type = bundle.getInt(Constants.ACTIVITY_TYPE);
         }
         mTipList = new ArrayList<>();
-        gaode();
+        onLocationClientOption();
         gaodeAdapter = new GaodeAdapter(mTipList);
         mRvAddress.setLayoutManager(new LinearLayoutManager(this));
         mRvAddress.setAdapter(gaodeAdapter);
@@ -137,13 +168,29 @@ public class GaodeActivity extends SimpleActivity implements AMapLocationListene
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        boolean b = hasPermission(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (!b) {
-            requestPermission(Constants.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION);
-        }
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
         mMapView.onCreate(savedInstanceState);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT >= 23
+                && getApplicationInfo().targetSdkVersion >= 23) {
+
+            if (isNeedCheck) {
+                checkPermissions(needPermissions);
+            }
+            //检测是否打开了gps设置
+            checkGPSIsOpen();
+            if (!isGPS) {
+                openGPSSettings();
+            }
+        }
+        onLocationClientOption();
+        //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
+        mMapView.onResume();
     }
 
     @OnClick({R.id.tv_right_content, R.id.img_back, R.id.img_back_start, R.id.tv_search})
@@ -154,8 +201,16 @@ public class GaodeActivity extends SimpleActivity implements AMapLocationListene
                     case Constants.ADD_STORES_ACTIVITY:
                         intent = new Intent(this, AddStoresActivity.class);
                         Bundle bundle = new Bundle();
+                        if (longitude == null) {
+                            longitude = 0.0;
+                        }
+                        if (latitude == null) {
+                            latitude = 0.0;
+                        }
                         Log.i(TAG, "AddressName: " + AddressName);
                         bundle.putString(Constants.ADDRESS_NAME, AddressName);
+                        bundle.putDouble(Constants.LONGITUDE, longitude);
+                        bundle.putDouble(Constants.LATITUDE, latitude);
                         intent.putExtra(Constants.ADDRESS_NAME, bundle);
                         setResult(RESULT_OK, intent);
                         finish();
@@ -182,7 +237,7 @@ public class GaodeActivity extends SimpleActivity implements AMapLocationListene
     }
 
 
-    void gaode() {
+    void onLocationClientOption() {
         if (aMap == null) {
             aMap = mMapView.getMap();
         }
@@ -219,8 +274,8 @@ public class GaodeActivity extends SimpleActivity implements AMapLocationListene
         //该方法默认为false。
         mLocationOption.setOnceLocation(true);
         //设置定位间隔,单位毫秒,默认为2000ms，最低1000ms。
-        mLocationOption.setInterval(100000);
-//设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+        mLocationOption.setInterval(2000);
+        //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
 
         //设置是否返回地址信息（默认返回地址信息）
@@ -270,7 +325,7 @@ public class GaodeActivity extends SimpleActivity implements AMapLocationListene
      * 自定义infowinfow窗口
      */
     public void render(Marker marker, View view) {
-    //如果想修改自定义Infow中内容，请通过view找到它并修改
+        //如果想修改自定义Infow中内容，请通过view找到它并修改
     }
 
     // 定义 Marker 点击事件监听
@@ -364,8 +419,12 @@ public class GaodeActivity extends SimpleActivity implements AMapLocationListene
             if (amapLocation.getErrorCode() == 0) {
                 //定位成功回调信息，设置相关消息
                 amapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
-                amapLocation.getLatitude();//获取纬度
-                amapLocation.getLongitude();//获取经度
+
+                longitude = amapLocation.getLongitude();//获取经度
+
+                latitude = amapLocation.getLatitude();//获取纬度
+
+
                 amapLocation.getAccuracy();//获取精度信息
                 SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Date date = new Date(amapLocation.getTime());
@@ -400,12 +459,6 @@ public class GaodeActivity extends SimpleActivity implements AMapLocationListene
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
-        mMapView.onResume();
-    }
 
     @Override
     protected void onPause() {
@@ -421,37 +474,172 @@ public class GaodeActivity extends SimpleActivity implements AMapLocationListene
         mMapView.onSaveInstanceState(outState);
     }
 
-    /**
-     * 申请指定的权限.
-     */
-    public void requestPermission(int requestCode, String... permissions) {
 
-        ActivityCompat.requestPermissions(this, permissions, requestCode);
+    //***********************************************定位权限*********************************************************************
+
+    /**
+     * @param permissions
+     * @since 2.5.0
+     */
+    private void checkPermissions(String... permissions) {
+        try {
+            if (Build.VERSION.SDK_INT >= 23
+                    && getApplicationInfo().targetSdkVersion >= 23) {
+                List<String> needRequestPermissonList = findDeniedPermissions(permissions);
+                if (null != needRequestPermissonList
+                        && needRequestPermissonList.size() > 0) {
+                    String[] array = needRequestPermissonList.toArray(new String[needRequestPermissonList.size()]);
+                    Method method = getClass().getMethod("requestPermissions", new Class[]{String[].class,
+                            int.class});
+
+                    method.invoke(this, array, PERMISSON_REQUESTCODE);
+                }
+            }
+        } catch (Throwable e) {
+        }
     }
 
 
     /**
-     * 判断是否有指定的权限
+     * 获取权限集中需要申请权限的列表
+     *
+     * @param permissions
+     * @return
+     * @since 2.5.0
      */
-    public boolean hasPermission(String... permissions) {
+    private List<String> findDeniedPermissions(String[] permissions) {
+        List<String> needRequestPermissonList = new ArrayList<String>();
+        if (Build.VERSION.SDK_INT >= 23
+                && getApplicationInfo().targetSdkVersion >= 23) {
+            try {
+                for (String perm : permissions) {
+                    Method checkSelfMethod = getClass().getMethod("checkSelfPermission", String.class);
+                    Method shouldShowRequestPermissionRationaleMethod = getClass().getMethod("shouldShowRequestPermissionRationale",
+                            String.class);
+                    if ((Integer) checkSelfMethod.invoke(this, perm) != PackageManager.PERMISSION_GRANTED
+                            || (Boolean) shouldShowRequestPermissionRationaleMethod.invoke(this, perm)) {
+                        needRequestPermissonList.add(perm);
+                    }
+                }
+            } catch (Throwable e) {
 
-        for (String permisson : permissions) {
-            if (ActivityCompat.checkSelfPermission(App.getInstance(), permisson)
-                    != PackageManager.PERMISSION_GRANTED) {
+            }
+        }
+        return needRequestPermissonList;
+    }
+
+    /**
+     * 检测是否所有的权限都已经授权
+     *
+     * @param grantResults
+     * @return
+     * @since 2.5.0
+     */
+    private boolean verifyPermissions(int[] grantResults) {
+        for (int result : grantResults) {
+            if (result != PackageManager.PERMISSION_GRANTED) {
                 return false;
             }
         }
         return true;
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-        } else {
-            ToastUtils.show("您已拒绝使用定位功能");
+    @TargetApi(23)
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] paramArrayOfInt) {
+        if (requestCode == PERMISSON_REQUESTCODE) {
+            if (!verifyPermissions(paramArrayOfInt)) {
+                showMissingPermissionDialog();
+                isNeedCheck = false;
+            }
         }
+    }
 
+    /**
+     * 显示提示信息
+     *
+     * @since 2.5.0
+     */
+    private void showMissingPermissionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("定位权限");
+        builder.setMessage("开启定位权限");
+
+        // 拒绝, 退出应用
+        builder.setNegativeButton(R.string.cancel,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+
+                    }
+                });
+
+        builder.setPositiveButton("设置",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startAppSettings();
+                    }
+                });
+
+        builder.setCancelable(false);
+
+        builder.show();
+    }
+
+    /**
+     * 启动应用的设置
+     *
+     * @since 2.5.0
+     */
+    private void startAppSettings() {
+        Intent intent = new Intent(
+                Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        intent.setData(Uri.parse("package:" + getPackageName()));
+        startActivity(intent);
+    }
+
+
+    /**
+     * 检测GPS是否打开
+     *
+     * @return
+     */
+    private void checkGPSIsOpen() {
+        LocationManager locationManager = (LocationManager) this
+                .getSystemService(Context.LOCATION_SERVICE);
+        isGPS = locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER);
+    }
+
+    /**
+     * 跳转GPS设置
+     */
+    private void openGPSSettings() {
+        //没有打开则弹出对话框
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.notifyTitle)
+                .setMessage(R.string.gpsNotifyMsg)
+                // 拒绝, 退出应用
+                .setNegativeButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        })
+
+                .setPositiveButton(R.string.setting,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //跳转GPS设置界面
+                                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivityForResult(intent, GPS_REQUEST_CODE);
+                            }
+                        })
+
+                .setCancelable(false)
+                .show();
 
     }
 

@@ -45,7 +45,6 @@ public class TipPopup extends BasePopupWindow implements View.OnClickListener {
     public TipPopup(Activity activity) {
         super(activity);
         this.activity = activity;
-
         findViewById(R.id.tv_cancel).setOnClickListener(this);
         findViewById(R.id.tv_confirm).setOnClickListener(this);
         setAlignBackground(false);
@@ -53,21 +52,6 @@ public class TipPopup extends BasePopupWindow implements View.OnClickListener {
     }
 
 
-
-    @Override
-    protected Animation onCreateDismissAnimation() {
-        AnimationSet set = new AnimationSet(true);
-        set.setInterpolator(new DecelerateInterpolator());
-        set.addAnimation(getScaleAnimation(1, 1, 1, 0, Animation.RELATIVE_TO_PARENT, 1, Animation.RELATIVE_TO_PARENT, 1));
-        set.addAnimation(getDefaultAlphaAnimation(false));
-        return set;
-    }
-
-    @Override
-    public void showPopupWindow(View v) {
-        setOffsetX(v.getWidth() / 2);
-        super.showPopupWindow(v);
-    }
 
 
     @Override

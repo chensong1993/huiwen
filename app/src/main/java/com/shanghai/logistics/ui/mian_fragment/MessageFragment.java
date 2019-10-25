@@ -1,9 +1,11 @@
 package com.shanghai.logistics.ui.mian_fragment;
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -31,6 +33,7 @@ import razerdp.basepopup.QuickPopupConfig;
 /**
  * 信牙信息首页
  */
+@SuppressLint("ValidFragment")
 public class MessageFragment extends SimpleFragment {
 
     @BindView(R.id.go_yun)
@@ -43,6 +46,16 @@ public class MessageFragment extends SimpleFragment {
     ImageView mImgMenu;
     int userType;
     static final String TAG = MessageFragment.class.getName();
+    Bundle bundle;
+    String mLoginPhone;
+
+    public MessageFragment() {
+    }
+
+    @SuppressLint("ValidFragment")
+    public MessageFragment(Bundle bundle) {
+        this.bundle = bundle;
+    }
 
     @Override
     protected int getLayoutId() {
@@ -54,6 +67,11 @@ public class MessageFragment extends SimpleFragment {
         mImgSearch.setVisibility(View.VISIBLE);
         userType = App.kv.decodeInt(Constants.SELECTED_USER_TYPE);
         Log.i(TAG, "initEventAndData: " + userType);
+
+        if(bundle!=null){
+            mLoginPhone=bundle.getString(Constants.PHONE);
+            Log.i(TAG, "initEventAndData: " + mLoginPhone);
+        }
     }
 
     @Override
@@ -86,7 +104,7 @@ public class MessageFragment extends SimpleFragment {
                 break;
             case R.id.img_menu:
                 MessagePopup popup = new MessagePopup(getActivity());
-                popup.setBackgroundColor(R.color.black_10);
+                popup.setBackgroundColor(R.color.transparent);
                 popup.showPopupWindow(mImgMenu);
                 break;
         }

@@ -1,5 +1,8 @@
 package com.shanghai.logistics.util;
 
+import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.text.TextUtils;
 
 import java.text.ParseException;
@@ -313,6 +316,22 @@ public class FormatUtil {
      */
     public static String checkValue(String str) {
         return TextUtils.isEmpty(str)?"":str;
+    }
+
+
+    /**
+     * 判断是否存在光传感器来判断是否为模拟器
+     * 部分真机也不存在温度和压力传感器。其余传感器模拟器也存在。
+     * @return true 为模拟器
+     */
+    public static Boolean notHasLightSensorManager(Context context) {
+        SensorManager sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        Sensor sensor8 = sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT); //光
+        if (null == sensor8) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 

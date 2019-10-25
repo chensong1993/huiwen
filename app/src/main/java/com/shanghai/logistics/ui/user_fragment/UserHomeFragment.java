@@ -13,7 +13,14 @@ import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hjq.toast.ToastUtils;
+import com.lljjcoder.Interface.OnCityItemClickListener;
+import com.lljjcoder.bean.CityBean;
+import com.lljjcoder.bean.DistrictBean;
+import com.lljjcoder.bean.ProvinceBean;
+import com.lljjcoder.style.cityjd.JDCityConfig;
+import com.lljjcoder.style.cityjd.JDCityPicker;
 import com.shanghai.logistics.R;
+import com.shanghai.logistics.app.App;
 import com.shanghai.logistics.app.Constants;
 import com.shanghai.logistics.base.BaseFragment;
 import com.shanghai.logistics.base.connectors.user.UserHomeListConnector;
@@ -31,9 +38,11 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class UserHomeFragment extends BaseFragment<UserHomeListPresenter> implements UserHomeListConnector.View {
-
+    private static final String TAG = "UserHomeFragment";
     @BindView(R.id.tv_title)
     TextView mTvTitle;
+    @BindView(R.id.tv_right_content)
+    TextView mTvRightTitle;
     @BindView(R.id.img_back)
     ImageView mImgBack;
     @BindView(R.id.tv_brand)
@@ -46,7 +55,9 @@ public class UserHomeFragment extends BaseFragment<UserHomeListPresenter> implem
     RecyclerView mRvOneLine;
     UserHomeListAdapter mHomeListAdapter;
     List<HomeListEntity> mHomeList;
-    private static final String TAG = "UserHomeFragment";
+    JDCityPicker cityPicker;
+    String Address;
+
 
     @Override
     protected int getLayoutId() {
@@ -57,7 +68,21 @@ public class UserHomeFragment extends BaseFragment<UserHomeListPresenter> implem
     @Override
     protected void initEventAndData() {
         mTvTitle.setText("首页");
-        mPresenter.getHomeList("上海");
+        mTvRightTitle.setText("地区");
+        cityPicker = new JDCityPicker();
+        cityPicker.init(getActivity());
+        mTvRightTitle.setVisibility(View.VISIBLE);
+
+        if (App.kv.decodeString(Constants.ADDRESS) == null) {
+            mTvRightTitle.setText("上海");
+            mPresenter.getHomeList("上海");
+        } else {
+            Address = App.kv.decodeString(Constants.ADDRESS);
+            mTvRightTitle.setText(Address);
+            mPresenter.getHomeList(Address);
+        }
+
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             int type = bundle.getInt(Constants.ACTIVITY_TYPE);
@@ -87,7 +112,7 @@ public class UserHomeFragment extends BaseFragment<UserHomeListPresenter> implem
         });
     }
 
-    @OnClick({R.id.img_back, R.id.tv_brand, R.id.tv_special})
+    @OnClick({R.id.img_back, R.id.tv_brand, R.id.tv_special, R.id.tv_right_content})
     void UserOnclick(View v) {
         switch (v.getId()) {
             case R.id.img_back:
@@ -98,6 +123,31 @@ public class UserHomeFragment extends BaseFragment<UserHomeListPresenter> implem
                 break;
             case R.id.tv_special:
                 startActivity(new Intent(getActivity(), SpecialLineActivity.class));
+                break;
+            case R.id.tv_right_content:
+                JDCityConfig jdCityConfig = new JDCityConfig.Builder().build();
+                jdCityConfig.setShowType(JDCityConfig.ShowType.PRO_CITY);
+                cityPicker.setConfig(jdCityConfig);
+                cityPicker.setOnCityItemClickListener(new OnCityItemClickListener() {
+                    @Override
+                    public void onSelected(ProvinceBean province, CityBean city, DistrictBean district) {
+                        if (city.getName().equals("省直辖县级行政单位")) {
+                            mTvRightTitle.setText(province.getName());
+                            mPresenter.getHomeList(province.getName());
+                            App.kv.encode(Constants.ADDRESS, province.getName());
+                        } else {
+                            mTvRightTitle.setText(city.getName());
+                            mPresenter.getHomeList(province.getName());
+                            App.kv.encode(Constants.ADDRESS, city.getName());
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancel() {
+                    }
+                });
+                cityPicker.showCityPicker();
                 break;
         }
     }
@@ -116,7 +166,13 @@ public class UserHomeFragment extends BaseFragment<UserHomeListPresenter> implem
     @Override
     public void homeListErr(String s) {
         Log.i(TAG, "homeListErr: " + s);
-        ToastUtils.show(s);
+        switch (s) {
+            case "0":
+                ToastUtils.show("暂无数据");
+                break;
+
+        }
+
     }
 
     @Override

@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
-apply plugin: 'com.github.dcendents.android-maven'
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
     compileOptions {
@@ -19,53 +18,53 @@ android {
             // 设置支持的SO库架构
             abiFilters 'armeabi', 'x86', 'armeabi-v7a'//, 'arm64-v8a'
         }
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [AROUTER_MODULE_NAME: project.getName()]
-            }
-        }
+//        javaCompileOptions {
+//            annotationProcessorOptions {
+//                arguments = [AROUTER_MODULE_NAME: project.getName()]
+//            }
+//        }
     }
+
+
+
     signingConfigs {
         release {
-            storeFile file("xinya.keystore")
+            storeFile file('xinya.jks')
             storePassword "xinya2019"
-            keyAlias "xinya.ketstore"
+            keyAlias "xinya"
             keyPassword "xinya2019"
         }
         debug {
-            storeFile file('E:/TemplateApp/app/xinya.keystore')
+            storeFile file('xinya.jks')
             storePassword "xinya2019"
-            keyAlias "xinya.keystore"
+            keyAlias "xinya"
             keyPassword "xinya2019"
         }
     }
     buildTypes {
-        debug {
+        release {
+            /**
+             *  编译时避免 出现以下错误信息  InnerClass annotations are missing corresponding EnclosingMember annotations. Such InnerClass annotations are ignored
+             */
             lintOptions {
-                checkReleaseBuilds false
-                // Or, if you prefer, you can continue to check for errors in release builds,
-                // but continue the build even when errors are found:
-                abortOnError false
+//                checkReleaseBuilds false
+//                abortOnError false
             }
-            buildConfigField "boolean", "LOG_DEBUG", "false"
-            buildConfigField "boolean", "USE_CANARY", "false"
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            debuggable false
+            signingConfig signingConfigs.release
         }
-        release {
+        debug {
+            /**
+             *  编译时避免 出现以下错误信息  InnerClass annotations are missing corresponding EnclosingMember annotations. Such InnerClass annotations are ignored
+             */
             lintOptions {
-                checkReleaseBuilds false
-                // Or, if you prefer, you can continue to check for errors in release builds,
-                // but continue the build even when errors are found:
-                abortOnError false
+//                checkReleaseBuilds true
+//                abortOnError false
             }
-            buildConfigField "boolean", "LOG_DEBUG", "true"
-            buildConfigField "boolean", "USE_CANARY", "true"
-            minifyEnabled true
-            shrinkResources true
-            zipAlignEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     sourceSets {
@@ -133,6 +132,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     implementation 'com.squareup.okhttp3:okhttp:3.9.0'
 
+    implementation 'com.alibaba:fastjson:1.2.61'
     //implementation 'com.youth.banner:banner:1.4.10'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-23'
@@ -235,6 +235,6 @@ dependencies {
     implementation project(':zxinglibrary')
     //高德地图
     implementation 'com.amap.api:3dmap:6.9.0'
-    implementation 'com.amap.api:location:4.6.0'
+    implementation 'com.amap.api:location:4.7.2'
     implementation 'com.amap.api:search:6.9.0'
 }

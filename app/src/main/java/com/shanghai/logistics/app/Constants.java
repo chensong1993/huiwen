@@ -28,8 +28,10 @@ public class Constants {
     public static final int ACCESS_FINE_LOCATION = 1001;//位置权限请求
 
     public static final String USER_PHONE = "username";
-
+    public static final String RONG_TARGETID = "rong_targetid";
+    public static final String RONG_TOKEN = "rong_token";
     public static final String USER_PASSWORD = "user_password";
+    public static final String ADDRESS = "address";
 
     public static final String ACTIVITY_TYPE = "activityType";
 
@@ -62,14 +64,20 @@ public class Constants {
     public static final String BILLING_VALUE ="billing_value";
 
     public static final String START_TYPE="start_type";
+
+    public static final String LOGIN_USER_INFO="login_user_info";
     //扫一扫返回结果
-    public static final int REQUEST_CODE_SCAN = 0x001;
+    public static final int REQUEST_CODE_SCAN = 2;
 
     public static final int USER_CLIENT = 1;
 
     public static final int DRIVER_CLIENT = 2;
 
     public static final int LOGISTICS_CLIENT = 3;
+
+    public static final String LONGITUDE="longitude";
+
+    public static final String LATITUDE="latitude";
 
     public static final String ADDRESS_NAME = "address_name";
 
@@ -107,6 +115,7 @@ public class Constants {
     public static final int LOGISTICS_ME_FRAGMENT = 203;
 
     public static final int OPERATING_CENTER_FRAGMENT = 204;
+
 
     /*
      * activity

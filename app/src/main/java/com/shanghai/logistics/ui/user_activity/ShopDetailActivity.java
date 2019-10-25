@@ -144,7 +144,7 @@ public class ShopDetailActivity extends BaseActivity<UserShopDetailPresenter> im
 
         mTvStoreServicePoint.setText("综合服务分" + e.getStoreServicePoint() + "");
 
-        mTvStoreAddress.setText(e.getStoreAddress());
+        mTvStoreAddress.setText(e.getStoreAddress()+e.getPosition());
 
         mTvIntroduction.setText(e.getIntroduction());
 
@@ -182,6 +182,7 @@ public class ShopDetailActivity extends BaseActivity<UserShopDetailPresenter> im
                 finish();
                 break;
             case R.id.img_call:
+                Log.i(TAG, "mContactPhone: "+mContactPhone);
                 Intent intent = new Intent(Intent.ACTION_DIAL);
                 Uri data = Uri.parse("tel:" + mContactPhone);
                 intent.setData(data);

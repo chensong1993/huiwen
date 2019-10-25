@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_vehicle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/red"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/dp_10"
+    android:padding="10dp">
+
+
+    <ImageView
+        android:id="@+id/img_car"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@color/hui" />
+
+    <TextView
+        android:id="@+id/tv_car_model"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="大货车" />
+
+</LinearLayout>

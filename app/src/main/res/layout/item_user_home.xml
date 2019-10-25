@@ -15,8 +15,8 @@
         <ImageView
             android:id="@+id/img_title"
             android:layout_width="match_parent"
-            android:scaleType="fitXY"
-            android:layout_height="100dp" />
+            android:layout_height="100dp"
+            android:scaleType="fitXY" />
 
         <TextView
             android:id="@+id/tv_city_zhuanxian"
@@ -52,7 +52,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -61,25 +62,25 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="left"
-                android:text="￥6/吨"
-                android:textSize="12dp"
-                android:textColor="@color/black"/>
+                android:text="￥645/吨"
+                android:textColor="@color/black"
+                android:textSize="12dp" />
 
             <TextView
                 android:id="@+id/tv_square"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="￥9/方"
-                android:textSize="12dp"
-                android:textColor="@color/black"/>
+                android:gravity="left"
+                android:text="￥954/方"
+                android:textColor="@color/black"
+                android:textSize="12dp" />
 
             <TextView
                 android:id="@+id/tv_sales_volume"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
+                android:layout_weight="1"
                 android:gravity="right"
                 android:text=""
                 android:textColor="@color/orange"

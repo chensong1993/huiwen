@@ -59,7 +59,7 @@ public class AddressListFragment extends BaseFragment<MainFriendPresenter> imple
 
     @Override
     protected void initEventAndData() {
-        mPresenter.getMainFriend("15169169195");
+        mPresenter.getMainFriend(mLoginPhone);
         mTvHeadTitle.setText("通讯录");
         mFriendEntityList = new ArrayList<>();
         mainFriendsAdapter = new MainFriendsAdapter(mFriendEntityList);
